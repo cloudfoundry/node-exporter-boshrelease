@@ -1,0 +1,31 @@
+meta:
+  environment: (( param "please set meta environment" ))
+  dns_root: (( param "please set meta dns_root" ))
+  security_groups: (( param "please set meta security_groups" ))
+
+  stemcell:
+    name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
+    version: latest
+
+jobs:
+  - name: node_exporter
+    networks:
+      - name: node-exporter
+
+compilation:
+  cloud_properties:
+    instance_type: m3.medium
+
+resource_pools:
+  - name: small
+    cloud_properties:
+      instance_type: m3.medium
+
+networks:
+  - name: node-exporter
+    type: dynamic
+    cloud_properties:
+      security_groups: (( grab meta.security_groups ))
+  - name: elastic
+    type: vip
+    cloud_properties: {}

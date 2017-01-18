@@ -1,0 +1,28 @@
+meta:
+  environment: node-exporter-warden
+
+  stemcell:
+    name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+    version: latest
+
+jobs:
+  - name: node_exporter
+    networks:
+      - name: node-exporter
+
+compilation:
+  cloud_properties: {}
+
+resource_pools:
+  - name: small
+    cloud_properties: {}
+
+networks:
+- name: node-exporter
+  type: manual
+  subnets:
+  - name: node-exporter
+    range: 10.244.234.0/24
+    gateway: 10.244.234.1
+    static:
+      - 10.244.234.2 - 10.244.234.60
