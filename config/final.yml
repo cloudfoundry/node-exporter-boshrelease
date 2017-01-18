@@ -1,0 +1,6 @@
+---
+final_name: node-exporter
+blobstore:
+  provider: s3
+  options:
+    bucket_name: node-exporter-boshrelease
