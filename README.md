@@ -18,7 +18,7 @@ Then create a runtime configuration file:
 ```
 releases:
  - name: node-exporter
-   version: 1
+   version: 1.0.0
 
 addons:
   - name: node_exporter
@@ -26,7 +26,6 @@ addons:
       - name: node_exporter
         release: node-exporter
     properties: {}
-
 ```
 
 Now you can update your [BOSH Runtime Config](http://bosh.io/docs/runtime-config.html) with the previously created file:
