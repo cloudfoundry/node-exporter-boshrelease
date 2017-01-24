@@ -10,7 +10,7 @@ To use this BOSH release, first upload it to your BOSH:
 
 ```
 $ bosh target <YOUR_BOSH_HOST>
-$ bosh upload release https://bosh.io/d/github.com/cloudfoundry-community/node-exporter-boshrelease
+$ bosh upload release https://github.com/cloudfoundry-community/node-exporter-boshrelease/releases/download/v1.0.0/node-exporter-1.0.0.tgz
 ```
 
 Then create a runtime configuration file:
