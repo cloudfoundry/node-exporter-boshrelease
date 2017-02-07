@@ -1,0 +1,32 @@
+# dummy-nodes deployment can be used to play with node exporter on 3 different nodes
+name: dummy-nodes
+
+releases:
+- name: node-exporter
+  version: latest
+
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: latest
+
+update:
+  canaries: 1
+  max_in_flight: 32
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
+  serial: false
+
+instance_groups:
+- name: dummy
+  instances: 3
+  azs: [z1, z2, z3]
+  jobs: []
+  jobs:
+  - name: node_exporter
+    release: node-exporter
+  persistent_disk: 1024
+  stemcell: default
+  vm_type: default
+  networks:
+  - name: default
