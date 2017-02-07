@@ -4,22 +4,15 @@ set -eu
 
 RUN_DIR=/var/vcap/sys/run/node_exporter
 LOG_DIR=/var/vcap/sys/log/node_exporter
-TMP_DIR=/var/vcap/sys/tmp/node_exporter
-STORE_DIR=/var/vcap/store/node_exporter
-mkdir -p ${RUN_DIR} ${LOG_DIR} ${TMP_DIR} ${STORE_DIR}
+mkdir -p ${RUN_DIR} ${LOG_DIR}
 
 PIDFILE=${RUN_DIR}/node_exporter.pid
 
-source /var/vcap/packages/node_exporter/common/utils.sh
-
-export PATH=/var/vcap/packages/node_exporter/bin:${PATH}
-
 case $1 in
   start)
-    pid_guard ${PIDFILE} "node_exporter"
     echo $$ > ${PIDFILE}
 
-    exec node_exporter \
+    exec /var/vcap/packages/node_exporter/bin/node_exporter \
       <% if_p('node_exporter.collector.diskstats_ignored_devices') do |diskstats_ignored_devices| %> \
       -collector.diskstats.ignored-devices="<%= diskstats_ignored_devices %>" \
       <% end %> \
@@ -73,7 +66,10 @@ case $1 in
     ;;
 
   stop)
-    kill_and_wait ${PIDFILE}
+    if [ -f ${PIDFILE} ]; then
+      kill -9 `cat ${PIDFILE}` || true
+      rm -f ${PIDFILE}
+    fi
     ;;
 
   *)

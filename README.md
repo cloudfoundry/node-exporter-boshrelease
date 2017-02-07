@@ -9,7 +9,6 @@ It is intented to be deployed as a [BOSH Addon](http://bosh.io/docs/runtime-conf
 To use this BOSH release, first upload it to your BOSH:
 
 ```
-$ bosh target <YOUR_BOSH_HOST>
 $ bosh upload release https://github.com/cloudfoundry-community/node-exporter-boshrelease/releases/download/v1.0.0/node-exporter-1.0.0.tgz
 ```
 
@@ -17,15 +16,14 @@ Then create a runtime configuration file:
 
 ```
 releases:
- - name: node-exporter
-   version: 1.0.0
+- name: node-exporter
+  version: 1.0.0
 
 addons:
+- name: node_exporter
+  jobs:
   - name: node_exporter
-    jobs:
-      - name: node_exporter
-        release: node-exporter
-    properties: {}
+    release: node-exporter
 ```
 
 Now you can update your [BOSH Runtime Config](http://bosh.io/docs/runtime-config.html) with the previously created file:
