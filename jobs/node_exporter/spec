@@ -5,7 +5,7 @@ packages:
   - node_exporter
 
 templates:
-  bin/node_exporter_ctl: bin/node_exporter_ctl
+  bin/ctl: bin/ctl
   config/role.prom: config/role.prom
 
 properties:
