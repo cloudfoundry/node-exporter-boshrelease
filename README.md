@@ -1,6 +1,6 @@
 # Prometheus Node Exporter BOSH Release
 
-This is a [BOSH](http://bosh.io/) release for the [Prometheus Node Exporter](https://github.com/prometheus/node_exporter).
+This is a [BOSH](http://bosh.io/) release for the [Prometheus Node Exporter](https://github.com/prometheus/node_exporter) for Linux based stemcells.
 
 It is intented to be deployed as a [BOSH Addon](http://bosh.io/docs/runtime-config.html#addons) and alongside the [Prometheus BOSH Release](https://github.com/cloudfoundry-community/prometheus-boshrelease).
 
