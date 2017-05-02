@@ -25,6 +25,9 @@ addons:
     jobs:
       - name: node_exporter
         release: node-exporter
+    include:
+      stemcell:
+        - os: ubuntu-trusty
     properties: {}
 ```
 
