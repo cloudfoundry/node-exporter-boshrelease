@@ -9,8 +9,8 @@ It is intented to be deployed as a [BOSH Addon](http://bosh.io/docs/runtime-conf
 To use this BOSH release, first upload it to your BOSH:
 
 ```
-$ bosh target <YOUR_BOSH_HOST>
-$ bosh upload release https://github.com/cloudfoundry-community/node-exporter-boshrelease/releases/download/v1.1.0/node-exporter-1.1.0.tgz
+export BOSH_ENVIRONMENT=<name>
+bosh upload-release https://github.com/cloudfoundry-community/node-exporter-boshrelease/releases/download/v1.1.0/node-exporter-1.1.0.tgz
 ```
 
 Then create a runtime configuration file:
@@ -34,7 +34,7 @@ addons:
 Now you can update your [BOSH Runtime Config](http://bosh.io/docs/runtime-config.html) with the previously created file:
 
 ```
-$ bosh update runtime-config <your runtime-config.yaml file location>
+bosh update-runtime-config <your runtime-config.yaml file location>
 ```
 
 Once runtime config is updated it will applied to all new deployments (the existing deployments will be considered outdated and they will be update when they are deployed again).
