@@ -1,0 +1,31 @@
+---
+name: node-exporter
+
+instance_groups:
+- name: node-exporter
+  azs: [z1]
+  instances: 1
+  vm_type: default
+  stemcell: default
+  networks: [{name: default}]
+  jobs:
+  - name: node_exporter
+    release: node-exporter
+
+update:
+  canaries: 0
+  max_in_flight: 1
+  serial: true
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
+
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: latest
+
+releases:
+- name: node-exporter
+  version: 1.1.0
+  url: https://github.com/cloudfoundry-community/node-exporter-boshrelease/releases/download/v1.1.0/node-exporter-1.1.0.tgz
+  sha1: 88c8d7c150acc3b74520a47ad91165b3a40e032f
