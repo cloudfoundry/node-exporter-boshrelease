@@ -48,7 +48,7 @@ jobs:
     - get: git
     - get: node_exporter
       trigger: true
-      params: { globs: [node_exporter-0.14.0.linux-amd64.tar.gz] }
+      params: { globs: [node_exporter-*.linux-amd64.tar.gz] }
   - task: update-node-exporter
     config:
       image_resource:
