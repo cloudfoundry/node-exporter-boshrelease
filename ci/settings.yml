@@ -28,79 +28,100 @@ meta:
     access_token: (( vault "secret/pipelines/shared/github:access_token" ))
 
   slack:
-    webhook:       (( vault "secret/pipelines/prometheus-boshrelease/slack:webhook" ))
-    channel:       '#prometheus'
-    username:      starkandwayne-ci
-    icon:          https://cl.ly/0o401h3l1x3R/logo-50x50.png
-    blob_success:  '(( concat "$BUILD_PIPELINE_NAME: New version of $BUILD_JOB_NAME was detected, and updated in master. <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME| Cut a new release?>" ))'
-    blob_failure:  '(( concat "$BUILD_PIPELINE_NAME: :airplane_arriving: <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME| Failed to update the blob for $BUILD_JOB_NAME>" ))'
+    webhook:      (( vault "secret/pipelines/prometheus-boshrelease/slack:webhook" ))
+    channel:      '#prometheus'
+    username:     starkandwayne-ci
+    icon:         https://cl.ly/0o401h3l1x3R/logo-50x50.png
+    blob_update:  '(( concat "<" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME?groups=blobs| Update blob?>" ))'
+    blob_release: '(( concat "<" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME?groups=blobs| Cut a new release?>" ))'
+    blob_failure: '(( concat "$BUILD_PIPELINE_NAME: :airplane_arriving: <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME| Failed to update blob at $BUILD_JOB_NAME>" ))'
 
 groups:
-- name: blobs
-  jobs:
-  - node_exporter
+  - name: blobs
+    jobs:
+      - node_exporter
+      - update_node_exporter
 
 jobs:
-- name: node_exporter
-  public: true
-  plan:
-  - aggregate:
-    - get: git
-    - get: node_exporter
-      trigger: true
-      params: { globs: [node_exporter-*.linux-amd64.tar.gz] }
-  - task: update-node-exporter
-    config:
-      image_resource:
-        type: docker-image
-        source:
-          repository: (( grab meta.image.name ))
-          tag:        (( grab meta.image.tag ))
-      platform: linux
-      inputs:
-      - name: git
-      - name: node_exporter
-      outputs:
-      - name: pushme
-      run:
-        path: ./git/ci/scripts/update-blob
-      params:
-        REPO_ROOT:   git
-        REPO_OUT:    pushme
-        BLOB_DIR:    node_exporter
-        BLOB_NAME:   node_exporter
-        BLOB_BINARY: node_exporter*.linux-amd64.tar.gz
-        BLOB_URL:    https://github.com/prometheus/node_exporter
-        BLOB_CLEANUP:     node_exporter/node_exporter.*
-        BLOB_DESTINATION: node_exporter/node_exporter-${VERSION}.linux-amd64.tar.gz
-        AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
-        AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
-        BRANCH:         (( grab meta.github.branch ))
+  - name: node_exporter
+    public: true
+    serial: true
+    plan:
+      - aggregate:
+        - get: node_exporter
+          trigger: true
+          params:
+            globs:
+              - node_exporter-*.linux-amd64.tar.gz
+      - put: notify
+        params:
+          channel:   (( grab meta.slack.channel ))
+          username:  (( grab meta.slack.username ))
+          icon_url:  (( grab meta.slack.icon ))
+          text:      '(( concat "$BUILD_PIPELINE_NAME: New version $TEXT_FILE_CONTENT of node-exporter was detected. " meta.slack.blob_update ))'
+          text_file: node_exporter/version
+
+  - name: update_node_exporter
+    public: true
+    serial: true
+    plan:
+      - aggregate:
+        - get: git
+        - get: node_exporter
+          trigger: false
+          passed:
+            - node_exporter
+          params:
+            globs:
+              - node_exporter-*.linux-amd64.tar.gz
+      - task: update-node-exporter
+        config:
+          image_resource:
+            type: docker-image
+            source:
+              repository: (( grab meta.image.name ))
+              tag:        (( grab meta.image.tag ))
+          platform: linux
+          inputs:
+            - name: git
+            - name: node_exporter
+          outputs:
+            - name: pushme
+          run:
+            path: ./git/ci/scripts/update-blob
+          params:
+            REPO_ROOT:        git
+            REPO_OUT:         pushme
+            BLOB_DIR:         node_exporter
+            BLOB_NAME:        node_exporter
+            BLOB_BINARY:      node_exporter*.linux-amd64.tar.gz
+            BLOB_URL:         https://github.com/prometheus/node_exporter
+            BLOB_CLEANUP:     node_exporter/node_exporter.*
+            BLOB_DESTINATION: node_exporter/node_exporter-${VERSION}.linux-amd64.tar.gz
+            AWS_ACCESS_KEY:   (( grab meta.aws.access_key ))
+            AWS_SECRET_KEY:   (( grab meta.aws.secret_key ))
+            BRANCH:           (( grab meta.github.branch ))
+      - put: git
+        params:
+          rebase: true
+          repository: pushme/git
+        on_success:
+          put: notify
+          params:
+            channel:   (( grab meta.slack.channel ))
+            username:  (( grab meta.slack.username ))
+            icon_url:  (( grab meta.slack.icon ))
+            text:      '(( concat "$BUILD_PIPELINE_NAME: New version $TEXT_FILE_CONTENT of node-exporter was updated in master. " meta.slack.blob_release ))'
+            text_file: node_exporter/version
     on_failure:
-      put: notify
-      params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_failure ))
-  - put: git
-    params:
-      rebase: true
-      repository: pushme/git
-    on_success:
-      put: notify
-      params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_success ))
-    on_failure:
-      put: notify
-      params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_failure ))
+      do:
+        - put: notify
+          params:
+            channel:   (( grab meta.slack.channel ))
+            username:  (( grab meta.slack.username ))
+            icon_url:  (( grab meta.slack.icon ))
+            text:      (( grab meta.slack.blob_failure ))
+            text_file: node_exporter/version
 
 resources:
   - name: node_exporter
