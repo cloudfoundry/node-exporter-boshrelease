@@ -1,0 +1,5 @@
+- type: replace
+  path: /releases/name=node-exporter
+  value:
+    name: node-exporter
+    version: latest
