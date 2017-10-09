@@ -9,36 +9,71 @@ templates:
   config/role.prom: config/role.prom
 
 properties:
-  node_exporter.collector.diskstats_ignored_devices:
-    description: "Regexp of devices to ignore for diskstats"
-  node_exporter.collector.filesystem_ignored_fs_types:
-    description: "Regexp of filesystem types to ignore for filesystem collector"
-  node_exporter.collector.filesystem_ignored_mount_points:
+  node_exporter.collector.filesystem.ignored_mount_points:
     description: "Regexp of mount points to ignore for filesystem collector"
-  node_exporter.collector.netdev_ignored_devices:
+  node_exporter.collector.filesystem.ignored_fs_types:
+    description: "Regexp of filesystem types to ignore for filesystem collector"
+
+  node_exporter.collector.netdev.ignored_devices:
     description: "Regexp of net devices to ignore for netdev collector"
-  node_exporter.collector.ntp_version:
-    description: "NTP protocol version"
-  node_exporter.collector.ntp_server:
+
+  node_exporter.collector.ntp.server:
     description: "NTP server to use for ntp collector"
-  node_exporter.collector.procfs:
+  node_exporter.collector.ntp.protocol_version:
+    description: "NTP protocol version"
+  node_exporter.collector.ntp.server_is_local:
+    description: "Certify that collector.ntp.server address is the same local host as this collector"
+  node_exporter.collector.ntp.ip_ttl:
+    description: "IP TTL to use while sending NTP query"
+  node_exporter.collector.ntp.max_distance:
+    description: "Max accumulated distance to the root"
+  node_exporter.collector.ntp.local_offset_tolerance:
+    description: "Offset between local clock and local ntpd time to tolerate"
+
+  node_exporter.path.procfs:
     description: "procfs mountpoint"
-  node_exporter.collector.sysfs:
+  node_exporter.path.sysfs:
     description: "sysfs mountpoint"
-  node_exporter.collector.systemd_private:
-    description: "Establish a private, direct connection to systemd without dbus"
-  node_exporter.collector.systemd_unit_blacklist:
-    description: "Regexp of systemd units to blacklist. Units must both match whitelist and not match blacklist to be included"
-  node_exporter.collector.systemd_unit_whitelist:
-    description: "Regexp of systemd units to whitelist. Units must both match whitelist and not match blacklist to be included"
-  node_exporter.collectors.enabled:
-    description: "Comma-separated list of collectors to use"
-  node_exporter.log_format:
-    description: "If set use a syslog logger or JSON logging"
-  node_exporter.log_level:
-    description: "Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]"
+
+  node_exporter.collector.runit.service_dir:
+    description: "Path to runit service directory"
+
+  node_exporter.collector.buddyinfo.enabled:
+    description: "Enable the buddyinfo collector (default: disabled)"
+  node_exporter.collector.diskstats.enabled:
+    description: "Enable the diskstats collector (default: enabled)"
+  node_exporter.collector.filesystem.enabled:
+    description: "Enable the filesystem collector (default: enabled)"
+  node_exporter.collector.gmond.enabled:
+    description: "Enable the gmond collector (default: disabled)"
+  node_exporter.collector.loadavg.enabled:
+    description: "Enable the loadavg collector (default: enabled)"
+  node_exporter.collector.megacli.enabled:
+    description: "Enable the megacli collector (default: disabled)"
+  node_exporter.collector.meminfo.enabled:
+    description: "Enable the meminfo collector (default: enabled)"
+  node_exporter.collector.netdev.enabled:
+    description: "Enable the netdev collector (default: enabled)"
+  node_exporter.collector.ntp.enabled:
+    description: "Enable the ntp collector (default: disabled)"
+  node_exporter.collector.runit.enabled:
+    description: "Enable the runit collector (default: disabled)"
+  node_exporter.collector.supervisord.enabled:
+    description: "Enable the supervisord collector (default: disabled)"
+  node_exporter.collector.textfile.enabled:
+    description: "Enable the textfile collector (default: enabled)"
+  node_exporter.collector.time.enabled:
+    description: "Enable the time collector (default: enabled)"
+  node_exporter.collector.cpu.enabled:
+    description: "Enable the cpu collector (default: enabled)"
+
   node_exporter.web.port:
     description: "Port on which to expose metrics and web interface"
     default: "9100"
   node_exporter.web.telemetry_path:
     description: "Path under which to expose metrics"
+
+  node_exporter.log.level:
+    description: "Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]"
+  node_exporter.log.format:
+    description: "Set the log target and format"
