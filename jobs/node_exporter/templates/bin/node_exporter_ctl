@@ -20,6 +20,9 @@ case $1 in
     echo $$ > ${PIDFILE}
 
     exec node_exporter \
+      <% if_p('node_exporter.collector.diskstats.ignored_devices') do |ignored_devices| %> \
+      --collector.diskstats.ignored-devices="<%= ignored_devices %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.filesystem.ignored_mount_points') do |ignored_mount_points| %> \
       --collector.filesystem.ignored-mount-points="<%= ignored_mount_points %>" \
       <% end %> \
@@ -53,16 +56,55 @@ case $1 in
       <% if_p('node_exporter.path.sysfs') do |sysfs| %> \
       --path.sysfs="<%= sysfs %>" \
       <% end %> \
+      <% if_p('node_exporter.qdisc.fixtures') do |fixturess| %> \
+      --collector.qdisc.fixtures="<%= fixtures %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.runit.service_dir') do |service_dir| %> \
       --collector.runit.servicedir="<%= service_dir %>" \
       <% end %> \
-      -collector.supervisord.url="http://localhost:<%= p('node_exporter.web.port') %>/RPC2" \
-      -collector.textfile.directory=/var/vcap/jobs/node_exporter/config \
+      --collector.supervisord.url="http://localhost:<%= p('node_exporter.web.port') %>/RPC2" \
+      <% if_p('node_exporter.collector.systemd.unit_whitelist') do |unit_whitelist| %> \
+      --collector.systemd.unit-whitelist="<%= unit_whitelist %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.systemd.unit_blacklist') do |unit_blacklist| %> \
+      --collector.systemd.unit-blacklist="<%= unit_blacklist %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.systemd.private') do |private| %> \
+      --collector.systemd.private="<%= private %>" \
+      <% end %> \
+      --collector.textfile.directory=/var/vcap/jobs/node_exporter/config \
+      <% if_p('node_exporter.collector.arp.enabled') do |enabled| %> \
+      --collector.arp="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.bcache.enabled') do |enabled| %> \
+      --collector.bcache="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.bonding.enabled') do |enabled| %> \
+      --collector.bonding="<%= enabled %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.buddyinfo.enabled') do |enabled| %> \
       --collector.buddyinfo="<%= enabled %>" \
       <% end %> \
+      <% if_p('node_exporter.collector.conntrack.enabled') do |enabled| %> \
+      --collector.conntrack="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.cpu.enabled') do |enabled| %> \
+      --collector.cpu="<%= enabled %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.diskstats.enabled') do |enabled| %> \
       --collector.diskstats="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.drbd.enabled') do |enabled| %> \
+      --collector.drbd="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.edac.enabled') do |enabled| %> \
+      --collector.edac="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.entropy.enabled') do |enabled| %> \
+      --collector.entropy="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.filefd.enabled') do |enabled| %> \
+      --collector.filefd="<%= enabled %>" \
       <% end %> \
       <% if_p('node_exporter.collector.filesystem.enabled') do |enabled| %> \
       --collector.filesystem="<%= enabled %>" \
@@ -70,8 +112,29 @@ case $1 in
       <% if_p('node_exporter.collector.gmond.enabled') do |enabled| %> \
       --collector.gmond="<%= enabled %>" \
       <% end %> \
+      <% if_p('node_exporter.collector.hwmon.enabled') do |enabled| %> \
+      --collector.hwmon="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.infiniband.enabled') do |enabled| %> \
+      --collector.infiniband="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.interrupts.enabled') do |enabled| %> \
+      --collector.interrupts="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.ipvsd.enabled') do |enabled| %> \
+      --collector.ipvs="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.ksmd.enabled') do |enabled| %> \
+      --collector.ksmd="<%= enabled %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.loadavg.enabled') do |enabled| %> \
       --collector.loadavg="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.logind.enabled') do |enabled| %> \
+      --collector.logind="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.mdadm.enabled') do |enabled| %> \
+      --collector.mdadm="<%= enabled %>" \
       <% end %> \
       <% if_p('node_exporter.collector.megacli.enabled') do |enabled| %> \
       --collector.megacli="<%= enabled %>" \
@@ -79,17 +142,44 @@ case $1 in
       <% if_p('node_exporter.collector.meminfo.enabled') do |enabled| %> \
       --collector.meminfo="<%= enabled %>" \
       <% end %> \
+      <% if_p('node_exporter.collector.meminfo_numa.enabled') do |enabled| %> \
+      --collector.meminfo_numa="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.mountstats.enabled') do |enabled| %> \
+      --collector.mountstats="<%= enabled %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.netdev.enabled') do |enabled| %> \
       --collector.netdev="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.netstat.enabled') do |enabled| %> \
+      --collector.netstat="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.nfs.enabled') do |enabled| %> \
+      --collector.nfs="<%= enabled %>" \
       <% end %> \
       <% if_p('node_exporter.collector.ntp.enabled') do |enabled| %> \
       --collector.ntp="<%= enabled %>" \
       <% end %> \
+      <% if_p('node_exporter.collector.qdisc.enabled') do |enabled| %> \
+       --collector.qdisc="<%= enabled %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.runit.enabled') do |enabled| %> \
       --collector.runit="<%= enabled %>" \
       <% end %> \
+      <% if_p('node_exporter.collector.sockstat.enabled') do |enabled| %> \
+      --collector.sockstat="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.stat.enabled') do |enabled| %> \
+      --collector.stat="<%= enabled %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.supervisord.enabled') do |enabled| %> \
       --collector.supervisord="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.systemd.enabled') do |enabled| %> \
+      --collector.systemd="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.tcpstat.enabled') do |enabled| %> \
+      --collector.tcpstat="<%= enabled %>" \
       <% end %> \
       <% if_p('node_exporter.collector.textfile.enabled') do |enabled| %> \
       --collector.textfile="<%= enabled %>" \
@@ -97,8 +187,23 @@ case $1 in
       <% if_p('node_exporter.collector.time.enabled') do |enabled| %> \
       --collector.time="<%= enabled %>" \
       <% end %> \
-      <% if_p('node_exporter.collector.cpu.enabled') do |enabled| %> \
-      --collector.cpu="<%= enabled %>" \
+      <% if_p('node_exporter.collector.uname.enabled') do |enabled| %> \
+      --collector.uname="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.vmstat.enabled') do |enabled| %> \
+      --collector.vmstat="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.wifi.enabled') do |enabled| %> \
+      --collector.wifi="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.xfs.enabled') do |enabled| %> \
+      --collector.xfs="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.zfs.enabled') do |enabled| %> \
+      --collector.zfs="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.timex.enabled') do |enabled| %> \
+      --collector.timex="<%= enabled %>" \
       <% end %> \
       --web.listen-address=":<%= p('node_exporter.web.port') %>" \
       <% if_p('node_exporter.web.telemetry_path') do |telemetry_path| %> \
