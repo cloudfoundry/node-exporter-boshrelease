@@ -2,7 +2,7 @@
 
 This is a [BOSH](http://bosh.io/) release for the [Prometheus Node Exporter](https://github.com/prometheus/node_exporter) for Linux based stemcells.
 
-It is intented to be deployed as a [BOSH Addon](http://bosh.io/docs/runtime-config.html#addons) and alongside the [Prometheus BOSH Release](https://github.com/cloudfoundry-community/prometheus-boshrelease).
+It is intented to be deployed as a [BOSH Addon](http://bosh.io/docs/runtime-config.html#addons) and alongside the [Prometheus BOSH Release](https://github.com/bosh-prometheus/prometheus-boshrelease).
 
 ## Usage
 
@@ -10,7 +10,7 @@ To use this BOSH release, first upload it to your BOSH:
 
 ```
 export BOSH_ENVIRONMENT=<name>
-bosh upload-release https://github.com/cloudfoundry-community/node-exporter-boshrelease/releases/download/v2.0.1/node-exporter-2.0.1.tgz
+bosh upload-release https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v2.0.1/node-exporter-2.0.1.tgz
 ```
 
 Then create a runtime configuration file:
@@ -41,8 +41,8 @@ Once runtime config is updated it will applied to all new deployments (the exist
 
 ## Contributing
 
-Refer to [CONTRIBUTING.md](https://github.com/cloudfoundry-community/node-exporter-boshrelease/blob/master/CONTRIBUTING.md).
+Refer to [CONTRIBUTING.md](https://github.com/bosh-prometheus/node-exporter-boshrelease/blob/master/CONTRIBUTING.md).
 
 ## License
 
-Apache License 2.0, see [LICENSE](https://github.com/cloudfoundry-community/node-exporter-boshrelease/blob/master/LICENSE).
+Apache License 2.0, see [LICENSE](https://github.com/bosh-prometheus/node-exporter-boshrelease/blob/master/LICENSE).

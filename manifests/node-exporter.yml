@@ -36,5 +36,5 @@ stemcells:
 releases:
 - name: node-exporter
   version: 2.0.1
-  url: https://github.com/cloudfoundry-community/node-exporter-boshrelease/releases/download/v2.0.1/node-exporter-2.0.1.tgz
+  url: https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v2.0.1/node-exporter-2.0.1.tgz
   sha1: d8f78005741291a0500754accb514b52a25db4af
