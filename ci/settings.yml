@@ -4,129 +4,27 @@ meta:
   target:  sw
   url:     https://ci.starkandwayne.com
 
-  initial_version: 1.1.0
-
-  manifest:
-    path:   manifests/node-exporter.yml
-
-  bosh-lite:
-    target: https://10.58.111.49:25555
-    username: (( vault "secret/bosh-lites/lite49/users/admin:username" ))
-    password: (( vault "secret/bosh-lites/lite49/users/admin:password" ))
-    cacert:   (( vault "secret/bosh-lites/lite49/certs:rootCA.pem" ))
-
   aws:
-    bucket: node-exporter-boshrelease
-    access_key: (( vault "secret/aws/cfcommunity:access" ))
-    secret_key: (( vault "secret/aws/cfcommunity:secret" ))
+    bucket:      node-exporter-boshrelease
+    region_name: us-east-1
+    access_key:  (( vault "secret/aws/cfcommunity:access" ))
+    secret_key:  (( vault "secret/aws/cfcommunity:secret" ))
+
+  docker:
+    username:     (( vault "secret/pipelines/node-exporter-boshrelease/docker:username" ))
+    password:     (( vault "secret/pipelines/node-exporter-boshrelease/docker:password" ))
+    organization: boshprometheus
+
+  git:
+    email: (( vault "secret/pipelines/node-exporter-boshrelease/github:email" ))
+    name:  (( vault "secret/pipelines/node-exporter-boshrelease/github:name" ))
 
   github:
-    owner:  cloudfoundry-community
-    repo:   (( concat meta.name "-boshrelease" ))
-    branch: master
-    private_key:  (( vault "secret/pipelines/shared/github:private_key" ))
-    access_token: (( vault "secret/pipelines/shared/github:access_token" ))
+    owner:        bosh-prometheus
+    branch:       master
+    private_key:  (( vault "secret/pipelines/node-exporter-boshrelease/github:private" ))
+    access_token: (( vault "secret/pipelines/node-exporter-boshrelease/github:token" ))
 
   slack:
-    webhook:      (( vault "secret/pipelines/prometheus-boshrelease/slack:webhook" ))
-    channel:      '#prometheus'
-    username:     starkandwayne-ci
-    icon:         https://www.starkandwayne.com/assets/images/shield-blue-50x50.png
-    blob_update:  '(( concat "<" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME?groups=blobs| Update blob?>" ))'
-    blob_release: '(( concat "<" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME?groups=blobs| Cut a new release?>" ))'
-    blob_failure: '(( concat "$BUILD_PIPELINE_NAME: :airplane_arriving: <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME| Failed to update blob at $BUILD_JOB_NAME>" ))'
-
-groups:
-  - name: blobs
-    jobs:
-      - node_exporter
-      - update_node_exporter
-
-jobs:
-  - name: node_exporter
-    public: true
-    serial: true
-    plan:
-      - aggregate:
-        - get: node_exporter
-          trigger: true
-          params:
-            globs:
-              - node_exporter-*.linux-amd64.tar.gz
-      - put: notify
-        params:
-          channel:   (( grab meta.slack.channel ))
-          username:  (( grab meta.slack.username ))
-          icon_url:  (( grab meta.slack.icon ))
-          text:      '(( concat "$BUILD_PIPELINE_NAME: New version $TEXT_FILE_CONTENT of node-exporter was detected. " meta.slack.blob_update ))'
-          text_file: node_exporter/version
-
-  - name: update_node_exporter
-    public: true
-    serial: true
-    plan:
-      - aggregate:
-        - get: git
-        - get: node_exporter
-          trigger: false
-          passed:
-            - node_exporter
-          params:
-            globs:
-              - node_exporter-*.linux-amd64.tar.gz
-      - task: update-node-exporter
-        config:
-          image_resource:
-            type: docker-image
-            source:
-              repository: (( grab meta.image.name ))
-              tag:        (( grab meta.image.tag ))
-          platform: linux
-          inputs:
-            - name: git
-            - name: node_exporter
-          outputs:
-            - name: pushme
-          run:
-            path: ./git/ci/scripts/update-blob
-          params:
-            REPO_ROOT:        git
-            REPO_OUT:         pushme
-            BLOB_DIR:         node_exporter
-            BLOB_NAME:        node_exporter
-            BLOB_BINARY:      node_exporter*.linux-amd64.tar.gz
-            BLOB_URL:         https://github.com/prometheus/node_exporter
-            BLOB_CLEANUP:     node_exporter/node_exporter.*
-            BLOB_DESTINATION: node_exporter/node_exporter-${VERSION}.linux-amd64.tar.gz
-            AWS_ACCESS_KEY:   (( grab meta.aws.access_key ))
-            AWS_SECRET_KEY:   (( grab meta.aws.secret_key ))
-            BRANCH:           (( grab meta.github.branch ))
-      - put: git
-        params:
-          rebase: true
-          repository: pushme/git
-        on_success:
-          put: notify
-          params:
-            channel:   (( grab meta.slack.channel ))
-            username:  (( grab meta.slack.username ))
-            icon_url:  (( grab meta.slack.icon ))
-            text:      '(( concat "$BUILD_PIPELINE_NAME: New version $TEXT_FILE_CONTENT of node-exporter was updated in master. " meta.slack.blob_release ))'
-            text_file: node_exporter/version
-    on_failure:
-      do:
-        - put: notify
-          params:
-            channel:   (( grab meta.slack.channel ))
-            username:  (( grab meta.slack.username ))
-            icon_url:  (( grab meta.slack.icon ))
-            text:      (( grab meta.slack.blob_failure ))
-            text_file: node_exporter/version
-
-resources:
-  - name: node_exporter
-    type: github-release
-    source:
-      user:         prometheus
-      repository:   node_exporter
-      access_token: (( grab meta.github.access_token ))
+    webhook: (( vault "secret/pipelines/node-exporter-boshrelease/slack:webhook" ))
+    channel: '#prometheus'
