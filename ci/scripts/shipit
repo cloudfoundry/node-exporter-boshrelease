@@ -52,7 +52,7 @@ header() {
 ###############################################################
 
 header "Creating final release..."
-pushd ${REPO_ROOT}
+cd ${REPO_ROOT}
 git submodule update --init --recursive --force
 cat > config/private.yml <<EOF
 ---
@@ -66,7 +66,7 @@ RELEASE_NAME=$(bosh int config/final.yml --path /final_name)
 bosh -n create-release --final --version "${VERSION}"
 bosh -n create-release releases/${RELEASE_NAME}/${RELEASE_NAME}-${VERSION}.yml \
         --tarball releases/${RELEASE_NAME}/${RELEASE_NAME}-${VERSION}.tgz
-popd
+cd -
 
 ###############################################################
 
@@ -99,7 +99,7 @@ if [[ -z $(git config --global user.name) ]]; then
   git config --global user.name "${GIT_NAME}"
 fi
 
-pushd ${REPO_ROOT}
+cd ${REPO_ROOT}
 for MANIFEST_PATH in $(ls manifests/*.yml); do
   ${DIR}/update-manifest ${GITHUB_OWNER} ${RELEASE_NAME} ${VERSION} ${SHA1} ${MANIFEST_PATH}
 done
@@ -107,7 +107,7 @@ git merge --no-edit ${BRANCH}
 git add -A
 git status
 git commit -m "${RELEASE_NAME} BOSH release v${VERSION}"
-popd
+cd -
 
 cp -a ${REPO_ROOT} ${REPO_OUT}
 
