@@ -70,7 +70,7 @@ cd -
 
 ###############################################################
 
-header "Generating github release..."
+header "Generating github release artifacts..."
 RELEASE_TGZ=${REPO_ROOT}/releases/${RELEASE_NAME}/${RELEASE_NAME}-${VERSION}.tgz
 SHA1=$(sha1sum ${RELEASE_TGZ} | head -n1 | awk '{print $1}')
 mkdir -p ${RELEASE_ROOT}/artifacts
@@ -119,5 +119,7 @@ New ${RELEASE_NAME} BOSH release v${VERSION} released. <https://github.com/${GIT
 EOF
 
 ###############################################################
+
+header "SUCCESS"
 
 exit 0
