@@ -10,15 +10,15 @@ To use this BOSH release, first upload it to your BOSH:
 
 ```
 export BOSH_ENVIRONMENT=<name>
-bosh upload-release https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v2.0.1/node-exporter-2.0.1.tgz
+bosh upload-release https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v3.0.0/node-exporter-3.0.0.tgz
 ```
 
 Then create a runtime configuration file:
 
 ```
 releases:
- - name: node-exporter
-   version: 2.0.1
+  - name: node-exporter
+    version: 3.0.0
 
 addons:
   - name: node_exporter
