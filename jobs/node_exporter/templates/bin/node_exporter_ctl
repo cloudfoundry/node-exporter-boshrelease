@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -eu
 
@@ -13,6 +13,9 @@ PIDFILE=${RUN_DIR}/node_exporter.pid
 source /var/vcap/packages/node_exporter/common/utils.sh
 
 export PATH=/var/vcap/packages/node_exporter/bin:${PATH}
+
+exec 1>> ${LOG_DIR}/$(basename "$0").stdout.log
+exec 2>> ${LOG_DIR}/$(basename "$0").stderr.log
 
 case $1 in
   start)
