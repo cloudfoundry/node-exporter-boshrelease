@@ -89,8 +89,10 @@ cat > tmp/deployment.yml <<EOF
   path: /name
   value: ${BOSH_DEPLOYMENT}
 - type: replace
-  path: /releases/name=${RELEASE_NAME}/version
-  value: latest
+  path: /releases/name=${RELEASE_NAME}
+  value:
+    name: ${RELEASE_NAME}
+    version: latest
 EOF
 
 VM_TYPE=$(bosh int <(bosh cloud-config) --path /vm_types/0/name)
