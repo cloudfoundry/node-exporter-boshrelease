@@ -55,7 +55,7 @@ bosh -n upload-stemcell ${STEMCELL}
 ###############################################################
 
 header "Creating candidate release..."
-pushd ${REPO_ROOT}
+cd ${REPO_ROOT}
 git submodule update --init --recursive --force
 cat > config/private.yml <<EOF
 ---
@@ -67,19 +67,19 @@ blobstore:
 EOF
 bosh -n reset-release
 bosh -n create-release
-popd
+cd -
 
 ###############################################################
 
 header "Uploading candidate release..."
-pushd ${REPO_ROOT}
+cd ${REPO_ROOT}
 bosh -n upload-release --rebase
-popd
+cd -
 
 ###############################################################
 
 header "Generating deployment manifest..."
-pushd ${REPO_ROOT}
+cd ${REPO_ROOT}
 mkdir -p tmp
 
 RELEASE_NAME=$(bosh int config/final.yml --path /final_name)
@@ -126,14 +126,14 @@ bosh int ${MANIFEST_PATH}    \
   --vars-file  tmp/vars.yml  \
   --var-errs                 \
   > tmp/manifest.yml
-popd
+cd -
 
 ###############################################################
 
 header "Deploying candidate release..."
-pushd ${REPO_ROOT}
+cd ${REPO_ROOT}
 bosh -n deploy tmp/manifest.yml
-popd
+cd -
 
 ###############################################################
 
