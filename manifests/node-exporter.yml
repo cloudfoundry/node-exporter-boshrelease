@@ -15,17 +15,10 @@ instance_groups:
         release: node-exporter
 
 update:
-  canaries: 0
-  max_in_flight: 1
-  serial: true
-  canary_watch_time: 1000-30000
-  update_watch_time: 1000-30000
-
-update:
   canaries: 1
   max_in_flight: 32
-  canary_watch_time: 1000-100000
-  update_watch_time: 1000-100000
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
   serial: false
 
 stemcells:
