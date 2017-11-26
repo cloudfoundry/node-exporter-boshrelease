@@ -77,11 +77,7 @@ groups:
     jobs:
       - build-ci-image
 
-  - name: blobs
-    jobs:
-      - node_exporter
-
-jobs:              
+jobs:
   - name: testflight
     public: true
     serial: true
@@ -377,25 +373,6 @@ jobs:
         icon_url: (( grab meta.slack.icon ))
         text:    '(( concat meta.slack.fail_url " " meta.pipeline ": build-ci-image job failed" ))'
 
-  - name: node_exporter
-    public: true
-    serial: true
-    plan:
-      - aggregate:
-        - get: node_exporter
-          trigger: true
-          params:
-            globs:
-              - node_exporter-*.linux-amd64.tar.gz
-
-      - put: notify
-        params:
-          channel:   (( grab meta.slack.channel ))
-          username:  (( grab meta.slack.username ))
-          icon_url:  (( grab meta.slack.icon ))
-          text:     '$BUILD_PIPELINE_NAME: New node-exporter version $TEXT_FILE_CONTENT has been detected'
-          text_file: node_exporter/version
-
 resource_types:
   - name: slack-notification
     type: docker-image
@@ -475,10 +452,3 @@ resources:
       repository: (( grab meta.docker.repository ))
       username:   (( grab meta.docker.username ))
       password:   (( grab meta.docker.password ))
-
-  - name: node_exporter
-    type: github-release
-    source:
-      user:         prometheus
-      repository:   node_exporter
-      access_token: (( grab meta.github.access_token ))
