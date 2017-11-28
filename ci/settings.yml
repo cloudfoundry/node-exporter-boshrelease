@@ -61,3 +61,4 @@ resources:
       user:         prometheus
       repository:   node_exporter
       access_token: (( grab meta.github.access_token ))
+      check_every:  30m
