@@ -20,6 +20,9 @@ properties:
   node_exporter.collector.netdev.ignored_devices:
     description: "Regexp of net devices to ignore for netdev collector"
 
+  node_exporter.collector.netstat.fields:
+    description: "Regexp of fields to return for netstat collector"
+
   node_exporter.collector.ntp.server:
     description: "NTP server to use for ntp collector"
   node_exporter.collector.ntp.protocol_version:
@@ -51,6 +54,9 @@ properties:
   node_exporter.collector.systemd.private:
     description: "Establish a private, direct connection to systemd without dbus"
 
+  node_exporter.collector.vmstat.fields:
+    description: "Regexp of fields to return for vmstat collector"
+
   node_exporter.collector.arp.enabled:
     description: "Enable the arp collector (default: enabled)"
   node_exporter.collector.bcache.enabled:
@@ -75,8 +81,6 @@ properties:
     description: "Enable the filefd collector (default: enabled)"
   node_exporter.collector.filesystem.enabled:
     description: "Enable the filesystem collector (default: enabled)"
-  node_exporter.collector.gmond.enabled:
-    description: "Enable the gmond collector (default: disabled)"
   node_exporter.collector.hwmon.enabled:
     description: "Enable the hwmon collector (default: enabled)"
   node_exporter.collector.infiniband.enabled:
@@ -93,8 +97,6 @@ properties:
     description: "Enable the logind collector (default: disabled)"
   node_exporter.collector.mdadm.enabled:
     description: "Enable the mdadm collector (default: enabled)"
-  node_exporter.collector.megacli.enabled:
-    description: "Enable the megacli collector (default: disabled)"
   node_exporter.collector.meminfo.enabled:
     description: "Enable the meminfo collector (default: enabled)"
   node_exporter.collector.meminfo_numa.enabled:
@@ -107,6 +109,8 @@ properties:
     description: "Enable the netstat collector (default: enabled)"
   node_exporter.collector.nfs.enabled:
     description: "Enable the nfs collector (default: disabled)"
+  node_exporter.collector.nfsd.enabled:
+    description: "Enable the nfsd collector (default: enabled)"
   node_exporter.collector.ntp.enabled:
     description: "Enable the ntp collector (default: disabled)"
   node_exporter.collector.qdisc.enabled:

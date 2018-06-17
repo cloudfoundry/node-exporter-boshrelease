@@ -34,6 +34,9 @@ case $1 in
       <% if_p('node_exporter.collector.netdev.ignored_devices') do |ignored_devices| %> \
       --collector.netdev.ignored-devices="<%= ignored_devices %>" \
       <% end %> \
+      <% if_p('node_exporter.collector.netstat.fields') do |fields| %> \
+      --collector.netstat.fields="<%= fields %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.ntp.server') do |server| %> \
       --collector.ntp.server="<%= server %>" \
       <% end %> \
@@ -75,6 +78,9 @@ case $1 in
       --collector.systemd.private="<%= private %>" \
       <% end %> \
       --collector.textfile.directory=/var/vcap/jobs/node_exporter/config \
+      <% if_p('node_exporter.collector.vmstat.fields') do |fields| %> \
+      --collector.vmstat.fields="<%= fields %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.arp.enabled') do |enabled| %> \
       --collector.arp="<%= enabled %>" \
       <% end %> \
@@ -111,9 +117,6 @@ case $1 in
       <% if_p('node_exporter.collector.filesystem.enabled') do |enabled| %> \
       --collector.filesystem="<%= enabled %>" \
       <% end %> \
-      <% if_p('node_exporter.collector.gmond.enabled') do |enabled| %> \
-      --collector.gmond="<%= enabled %>" \
-      <% end %> \
       <% if_p('node_exporter.collector.hwmon.enabled') do |enabled| %> \
       --collector.hwmon="<%= enabled %>" \
       <% end %> \
@@ -138,9 +141,6 @@ case $1 in
       <% if_p('node_exporter.collector.mdadm.enabled') do |enabled| %> \
       --collector.mdadm="<%= enabled %>" \
       <% end %> \
-      <% if_p('node_exporter.collector.megacli.enabled') do |enabled| %> \
-      --collector.megacli="<%= enabled %>" \
-      <% end %> \
       <% if_p('node_exporter.collector.meminfo.enabled') do |enabled| %> \
       --collector.meminfo="<%= enabled %>" \
       <% end %> \
@@ -158,6 +158,9 @@ case $1 in
       <% end %> \
       <% if_p('node_exporter.collector.nfs.enabled') do |enabled| %> \
       --collector.nfs="<%= enabled %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.nfsd.enabled') do |enabled| %> \
+      --collector.nfsd="<%= enabled %>" \
       <% end %> \
       <% if_p('node_exporter.collector.ntp.enabled') do |enabled| %> \
       --collector.ntp="<%= enabled %>" \
