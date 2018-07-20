@@ -133,8 +133,8 @@ properties:
     description: "Enable the netstat collector (default: enabled)"
     default: true
   node_exporter.collector.nfs.enabled:
-    description: "Enable the nfs collector (default: disabled)"
-    default: false
+    description: "Enable the nfs collector (default: enabled)"
+    default: true
   node_exporter.collector.nfsd.enabled:
     description: "Enable the nfsd collector (default: enabled)"
     default: true
