@@ -59,90 +59,133 @@ properties:
 
   node_exporter.collector.arp.enabled:
     description: "Enable the arp collector (default: enabled)"
+    default: true
   node_exporter.collector.bcache.enabled:
     description: "Enable the bcache collector (default: enabled)"
+    default: true
   node_exporter.collector.bonding.enabled:
     description: "Enable the bonding collector (default: disabled)"
+    default: true
   node_exporter.collector.buddyinfo.enabled:
     description: "Enable the buddyinfo collector (default: disabled)"
+    default: false
   node_exporter.collector.conntrack.enabled:
     description: "Enable the conntrack collector (default: enabled)"
+    default: true
   node_exporter.collector.cpu.enabled:
     description: "Enable the cpu collector (default: enabled)"
+    default: true
   node_exporter.collector.diskstats.enabled:
     description: "Enable the diskstats collector (default: enabled)"
+    default: true
   node_exporter.collector.drbd.enabled:
     description: "Enable the drbd collector (default: disabled)"
+    default: false
   node_exporter.collector.edac.enabled:
     description: "Enable the edac collector (default: enabled)"
+    default: true
   node_exporter.collector.entropy.enabled:
     description: "Enable the entropy collector (default: enabled)"
+    default: true
   node_exporter.collector.filefd.enabled:
     description: "Enable the filefd collector (default: enabled)"
+    default: true
   node_exporter.collector.filesystem.enabled:
     description: "Enable the filesystem collector (default: enabled)"
+    default: true
   node_exporter.collector.hwmon.enabled:
     description: "Enable the hwmon collector (default: enabled)"
+    default: true
   node_exporter.collector.infiniband.enabled:
     description: "Enable the infiniband collector (default: enabled)"
+    default: true
   node_exporter.collector.interrupts.enabled:
     description: "Enable the interrupts collector (default: disabled)"
-  node_exporter.collector.ipvsd.enabled:
+    default: false
+  node_exporter.collector.ipvs.enabled:
     description: "Enable the ipvs collector (default: enabled)"
+    default: true
   node_exporter.collector.ksmd.enabled:
     description: "Enable the ksmd collector (default: disabled)"
+    default: false
   node_exporter.collector.loadavg.enabled:
     description: "Enable the loadavg collector (default: enabled)"
+    default: true
   node_exporter.collector.logind.enabled:
     description: "Enable the logind collector (default: disabled)"
+    default: false
   node_exporter.collector.mdadm.enabled:
     description: "Enable the mdadm collector (default: enabled)"
+    default: true
   node_exporter.collector.meminfo.enabled:
     description: "Enable the meminfo collector (default: enabled)"
+    default: true
   node_exporter.collector.meminfo_numa.enabled:
     description: "Enable the meminfo_numa collector (default: disabled)"
+    default: false
   node_exporter.collector.mountstats.enabled:
     description: "Enable the mountstats collector (default: disabled)"
+    default: false
   node_exporter.collector.netdev.enabled:
     description: "Enable the netdev collector (default: enabled)"
+    default: true
   node_exporter.collector.netstat.enabled:
     description: "Enable the netstat collector (default: enabled)"
+    default: true
   node_exporter.collector.nfs.enabled:
     description: "Enable the nfs collector (default: disabled)"
+    default: false
   node_exporter.collector.nfsd.enabled:
     description: "Enable the nfsd collector (default: enabled)"
+    default: true
   node_exporter.collector.ntp.enabled:
     description: "Enable the ntp collector (default: disabled)"
+    default: false
   node_exporter.collector.qdisc.enabled:
     description: "Enable the qdisc collector (default: disabled)"
+    default: false
   node_exporter.collector.runit.enabled:
     description: "Enable the runit collector (default: disabled)"
+    default: false
   node_exporter.collector.sockstat.enabled:
     description: "Enable the sockstat collector (default: enabled)"
+    default: true
   node_exporter.collector.stat.enabled:
     description: "Enable the stat collector (default: enabled)"
+    default: true
   node_exporter.collector.supervisord.enabled:
     description: "Enable the supervisord collector (default: disabled)"
+    default: false
   node_exporter.collector.systemd.enabled:
     description: "Enable the systemd collector (default: disabled)"
+    default: false
   node_exporter.collector.tcpstat.enabled:
     description: "Enable the tcpstat collector (default: disabled)"
+    default: false
   node_exporter.collector.textfile.enabled:
     description: "Enable the textfile collector (default: enabled)"
+    default: true
   node_exporter.collector.time.enabled:
     description: "Enable the time collector (default: enabled)"
+    default: true
   node_exporter.collector.uname.enabled:
     description: "Enable the uname collector (default: enabled)"
+    default: true
   node_exporter.collector.vmstat.enabled:
     description: "Enable the vmstat collector (default: enabled)"
+    default: true
   node_exporter.collector.wifi.enabled:
     description: "Enable the wifi collector (default: enabled)"
+    default: true
   node_exporter.collector.xfs.enabled:
     description: "Enable the xfs collector (default: enabled)"
+    default: true
   node_exporter.collector.zfs.enabled:
     description: "Enable the zfs collector (default: enabled)"
+    default: true
   node_exporter.collector.timex.enabled:
     description: "Enable the timex collector (default: enabled)"
+    default: true
 
   node_exporter.web.port:
     description: "Port on which to expose metrics and web interface"
