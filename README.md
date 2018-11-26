@@ -28,6 +28,7 @@ addons:
     include:
       stemcell:
         - os: ubuntu-trusty
+        - os: ubuntu-xenial
     properties: {}
 ```
 
