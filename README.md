@@ -10,7 +10,7 @@ To use this BOSH release, first upload it to your BOSH:
 
 ```
 export BOSH_ENVIRONMENT=<name>
-bosh upload-release https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v4.0.1/node-exporter-4.0.1.tgz
+bosh upload-release https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v4.1.0/node-exporter-4.1.0.tgz
 ```
 
 Then create a runtime configuration file:
@@ -18,7 +18,7 @@ Then create a runtime configuration file:
 ```
 releases:
   - name: node-exporter
-    version: 4.0.1
+    version: 4.1.0
 
 addons:
   - name: node_exporter
