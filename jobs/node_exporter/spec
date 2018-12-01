@@ -40,6 +40,8 @@ properties:
     description: "procfs mountpoint"
   node_exporter.path.sysfs:
     description: "sysfs mountpoint"
+  node_exporter.path.rootfs:
+    description: "rootfs mountpoint"
 
   node_exporter.qdisc.fixtures:
     description: "test fixtures to use for qdisc collector end-to-end testing"
@@ -126,6 +128,9 @@ properties:
   node_exporter.collector.mountstats.enabled:
     description: "Enable the mountstats collector (default: disabled)"
     default: false
+  node_exporter.collector.netclass.enabled:
+    description: "Enable the netclass collector (default: enabled)"
+    default: true
   node_exporter.collector.netdev.enabled:
     description: "Enable the netdev collector (default: enabled)"
     default: true
@@ -140,6 +145,9 @@ properties:
     default: true
   node_exporter.collector.ntp.enabled:
     description: "Enable the ntp collector (default: disabled)"
+    default: false
+  node_exporter.collector.processes.enabled:
+    description: "Enable the processes collector (default: disabled)"
     default: false
   node_exporter.collector.qdisc.enabled:
     description: "Enable the qdisc collector (default: disabled)"
@@ -168,6 +176,9 @@ properties:
   node_exporter.collector.time.enabled:
     description: "Enable the time collector (default: enabled)"
     default: true
+  node_exporter.collector.timex.enabled:
+    description: "Enable the timex collector (default: enabled)"
+    default: true
   node_exporter.collector.uname.enabled:
     description: "Enable the uname collector (default: enabled)"
     default: true
@@ -182,9 +193,6 @@ properties:
     default: true
   node_exporter.collector.zfs.enabled:
     description: "Enable the zfs collector (default: enabled)"
-    default: true
-  node_exporter.collector.timex.enabled:
-    description: "Enable the timex collector (default: enabled)"
     default: true
 
   node_exporter.web.port:

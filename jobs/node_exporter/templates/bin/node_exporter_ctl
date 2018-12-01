@@ -42,10 +42,12 @@ export PATH=/var/vcap/packages/node_exporter/bin:${PATH}
       meminfo_numa
       mountstats
       netdev
+      netclass
       netstat
       nfs
       nfsd
       ntp
+      processes
       qdisc
       runit
       sockstat
@@ -108,6 +110,9 @@ case $1 in
       <% end %> \
       <% if_p('node_exporter.path.sysfs') do |sysfs| %> \
       --path.sysfs="<%= sysfs %>" \
+      <% end %> \
+      <% if_p('node_exporter.path.rootfs') do |rootfs| %> \
+      --path.rootfs="<%= rootfs %>" \
       <% end %> \
       <% if_p('node_exporter.qdisc.fixtures') do |fixturess| %> \
       --collector.qdisc.fixtures="<%= fixtures %>" \
