@@ -1,4 +1,4 @@
-node_exporter/node_exporter-0.17.0.linux-amd64.tar.gz:
-  size: 7018111
-  object_id: c3951151-751e-4841-4a25-74481c77cf63
-  sha: ab88276c82d1becd12eb3971c907020bdecdefc3
+node_exporter/node_exporter-0.18.1.linux-amd64.tar.gz:
+  size: 8083296
+  object_id: 6fa631fe-188a-4abe-734b-e47dca74e06d
+  sha: sha256:b2503fd932f85f4e5baf161268854bf5d22001869b84f00fd2d1f57b51b72424
