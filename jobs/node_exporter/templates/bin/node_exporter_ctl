@@ -24,6 +24,7 @@ export PATH=/var/vcap/packages/node_exporter/bin:${PATH}
       buddyinfo
       conntrack
       cpu
+      cpufreq
       diskstats
       drbd
       edac
@@ -41,12 +42,14 @@ export PATH=/var/vcap/packages/node_exporter/bin:${PATH}
       meminfo
       meminfo_numa
       mountstats
-      netdev
       netclass
+      netdev
       netstat
       nfs
       nfsd
       ntp
+      perf
+      pressure
       processes
       qdisc
       runit
@@ -81,6 +84,9 @@ case $1 in
       <% if_p('node_exporter.collector.filesystem.ignored_fs_types') do |ignored_fs_types| %> \
       --collector.filesystem.ignored-fs-types="<%= ignored_fs_types %>" \
       <% end %> \
+      <% if_p('node_exporter.collector.netclass.ignored_devices') do |ignored_devices| %> \
+      --collector.netclass.ignored-devices="<%= ignored_devices %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.netdev.ignored_devices') do |ignored_devices| %> \
       --collector.netdev.ignored-devices="<%= ignored_devices %>" \
       <% end %> \
@@ -93,8 +99,8 @@ case $1 in
       <% if_p('node_exporter.collector.ntp.protocol_version') do |protocol_version| %> \
       --collector.ntp.protocol-version=<%= protocol_version %> \
       <% end %> \
-      <% if_p('node_exporter.collector.ntp.server_is_local') do |server_is_local| %> \
-      --collector.ntp.server-is-local="<%= server_is_local %>" \
+      <% if p('node_exporter.collector.ntp.server_is_local') %> \
+      --collector.ntp.server-is-local \
       <% end %> \
       <% if_p('node_exporter.collector.ntp.ip_ttl') do |ip_ttl| %> \
       --collector.ntp.ip-ttl="<%= ip_ttl %>" \
@@ -127,12 +133,24 @@ case $1 in
       <% if_p('node_exporter.collector.systemd.unit_blacklist') do |unit_blacklist| %> \
       --collector.systemd.unit-blacklist="<%= unit_blacklist %>" \
       <% end %> \
-      <% if_p('node_exporter.collector.systemd.private') do |private| %> \
-      --collector.systemd.private="<%= private %>" \
+      <% if p('node_exporter.collector.systemd.private') %> \
+      --collector.systemd.private \
+      <% end %> \
+      <% if p('node_exporter.collector.systemd.enable_task_metrics') %> \
+      --collector.systemd.enable-task-metrics \
+      <% end %> \
+      <% if p('node_exporter.collector.systemd.enable_restarts_metrics') %> \
+      --collector.systemd.enable-restarts-metrics \
+      <% end %> \
+      <% if p('node_exporter.collector.systemd.enable_start_time_metrics') %> \
+      --collector.systemd.enable-start-time-metrics \
       <% end %> \
       --collector.textfile.directory=/var/vcap/jobs/node_exporter/config \
       <% if_p('node_exporter.collector.vmstat.fields') do |fields| %> \
       --collector.vmstat.fields="<%= fields %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.collector.wifi.fixtures') do |fixtures| %> \
+      --collector.wifi.fixtures="<%= fixtures %>" \
       <% end %> \
       <% collectors.each do |collector| %> \
       <% if_p("node_exporter.collector.#{collector}.enabled") do |enabled| %> \
@@ -142,6 +160,12 @@ case $1 in
       --web.listen-address=":<%= p('node_exporter.web.port') %>" \
       <% if_p('node_exporter.web.telemetry_path') do |telemetry_path| %> \
       --web.telemetry-path="<%= telemetry_path %>" \
+      <% end %> \
+      <% if p('node_exporter.web.disable_exporter_metrics') %> \
+      --web.disable-exporter-metrics \
+      <% end %> \
+      <% if_p('node_exporter.web.max_requests') do |max_requests| %> \
+      --web.max-requests="<%= max_requests %>" \
       <% end %> \
       <% if_p('node_exporter.log.level') do |level| %> \
       --log.level="<%= level %>" \

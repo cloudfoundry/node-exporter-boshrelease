@@ -17,6 +17,9 @@ properties:
   node_exporter.collector.filesystem.ignored_fs_types:
     description: "Regexp of filesystem types to ignore for filesystem collector"
 
+  node_exporter.collector.netclass.ignored_devices:
+    description: "Regexp of net devices to ignore for netclass collector"
+
   node_exporter.collector.netdev.ignored_devices:
     description: "Regexp of net devices to ignore for netdev collector"
 
@@ -29,6 +32,7 @@ properties:
     description: "NTP protocol version"
   node_exporter.collector.ntp.server_is_local:
     description: "Certify that collector.ntp.server address is the same local host as this collector"
+    default: false
   node_exporter.collector.ntp.ip_ttl:
     description: "IP TTL to use while sending NTP query"
   node_exporter.collector.ntp.max_distance:
@@ -55,9 +59,22 @@ properties:
     description: "Regexp of systemd units to blacklist. Units must both match whitelist and not match blacklist to be included"
   node_exporter.collector.systemd.private:
     description: "Establish a private, direct connection to systemd without dbus"
+    default: false
+  node_exporter.collector.systemd.enable_task_metrics:
+    description: "Enables service unit tasks metrics unit_tasks_current and unit_tasks_max"
+    default: false
+  node_exporter.collector.systemd.enable_restarts_metrics:
+    description: "Enables service unit metric service_restart_total"
+    default: false
+  node_exporter.collector.systemd.enable_start_time_metrics:
+    description: "Enables service unit metric unit_start_time_seconds"
+    default: false
 
   node_exporter.collector.vmstat.fields:
     description: "Regexp of fields to return for vmstat collector"
+
+  node_exporter.collector.collector.wifi.fixtures:
+    description: "test fixtures to use for wifi collector metrics"
 
   node_exporter.collector.arp.enabled:
     description: "Enable the arp collector (default: enabled)"
@@ -66,7 +83,7 @@ properties:
     description: "Enable the bcache collector (default: enabled)"
     default: true
   node_exporter.collector.bonding.enabled:
-    description: "Enable the bonding collector (default: disabled)"
+    description: "Enable the bonding collector (default: enabled)"
     default: true
   node_exporter.collector.buddyinfo.enabled:
     description: "Enable the buddyinfo collector (default: disabled)"
@@ -76,6 +93,9 @@ properties:
     default: true
   node_exporter.collector.cpu.enabled:
     description: "Enable the cpu collector (default: enabled)"
+    default: true
+  node_exporter.collector.cpufreq.enabled:
+    description: "Enable the cpufreq collector (default: enabled)"
     default: true
   node_exporter.collector.diskstats.enabled:
     description: "Enable the diskstats collector (default: enabled)"
@@ -146,6 +166,12 @@ properties:
   node_exporter.collector.ntp.enabled:
     description: "Enable the ntp collector (default: disabled)"
     default: false
+  node_exporter.collector.perf.enabled:
+    description: "Enable the perf collector (default: disabled)"
+    default: false
+  node_exporter.collector.pressure.enabled:
+    description: "Enable the pressure collector (default: enabled)"
+    default: true
   node_exporter.collector.processes.enabled:
     description: "Enable the processes collector (default: disabled)"
     default: false
@@ -186,8 +212,8 @@ properties:
     description: "Enable the vmstat collector (default: enabled)"
     default: true
   node_exporter.collector.wifi.enabled:
-    description: "Enable the wifi collector (default: enabled)"
-    default: true
+    description: "Enable the wifi collector (default: disabled)"
+    default: false
   node_exporter.collector.xfs.enabled:
     description: "Enable the xfs collector (default: enabled)"
     default: true
@@ -200,6 +226,11 @@ properties:
     default: "9100"
   node_exporter.web.telemetry_path:
     description: "Path under which to expose metrics"
+  node_exporter.web.disable_exporter_metrics:
+    description: "Exclude metrics about the exporter itself (promhttp_*, process_*, go_*)"
+    default: false
+  node_exporter.web.max_requests:
+    description: "Maximum number of parallel scrape requests"
 
   node_exporter.log.level:
     description: "Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]"
