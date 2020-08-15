@@ -21,6 +21,7 @@ export PATH=/var/vcap/packages/node_exporter/bin:${PATH}
       arp
       bcache
       bonding
+      btrfs
       buddyinfo
       conntrack
       cpu
@@ -49,18 +50,24 @@ export PATH=/var/vcap/packages/node_exporter/bin:${PATH}
       nfsd
       ntp
       perf
+      powersupplyclass
       pressure
       processes
       qdisc
+      rapl
       runit
+      schedstat
       sockstat
+      softnet
       stat
       supervisord
       systemd
       tcpstat
       textfile
+      thermal_zone
       time
       timex
+      udp_queues
       uname
       vmstat
       wifi
@@ -75,6 +82,9 @@ case $1 in
     echo $$ > ${PIDFILE}
 
     exec node_exporter \
+      <% if p('node_exporter.collector.cpu.info') %> \
+      --collector.cpu.info \
+      <% end %> \
       <% if_p('node_exporter.collector.diskstats.ignored_devices') do |ignored_devices| %> \
       --collector.diskstats.ignored-devices="<%= ignored_devices %>" \
       <% end %> \
@@ -87,8 +97,11 @@ case $1 in
       <% if_p('node_exporter.collector.netclass.ignored_devices') do |ignored_devices| %> \
       --collector.netclass.ignored-devices="<%= ignored_devices %>" \
       <% end %> \
-      <% if_p('node_exporter.collector.netdev.ignored_devices') do |ignored_devices| %> \
-      --collector.netdev.ignored-devices="<%= ignored_devices %>" \
+      <% if_p('node_exporter.collector.netdev.device_blacklist') do |device_blacklist| %> \
+      --collector.netdev.device-blacklist="<%= device_blacklist %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.netdev.device_whitelist') do |device_whitelist| %> \
+      --collector.netdev.device-whitelist="<%= device_whitelist %>" \
       <% end %> \
       <% if_p('node_exporter.collector.netstat.fields') do |fields| %> \
       --collector.netstat.fields="<%= fields %>" \
@@ -120,7 +133,16 @@ case $1 in
       <% if_p('node_exporter.path.rootfs') do |rootfs| %> \
       --path.rootfs="<%= rootfs %>" \
       <% end %> \
-      <% if_p('node_exporter.qdisc.fixtures') do |fixturess| %> \
+      <% if_p('node_exporter.collector.perf.cpus') do |cpus| %> \
+      --collector.perf.cpus="<%= cpus %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.perf.tracepoint') do |tracepoint| %> \
+      --collector.perf.tracepoint="<%= tracepoint %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.powersupply.ignored_supplies') do |ignored_supplies| %> \
+      --collector.powersupply.ignored-supplies="<%= ignored_supplies %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.qdisc.fixtures') do |fixtures| %> \
       --collector.qdisc.fixtures="<%= fixtures %>" \
       <% end %> \
       <% if_p('node_exporter.collector.runit.service_dir') do |service_dir| %> \
@@ -132,9 +154,6 @@ case $1 in
       <% end %> \
       <% if_p('node_exporter.collector.systemd.unit_blacklist') do |unit_blacklist| %> \
       --collector.systemd.unit-blacklist="<%= unit_blacklist %>" \
-      <% end %> \
-      <% if p('node_exporter.collector.systemd.private') %> \
-      --collector.systemd.private \
       <% end %> \
       <% if p('node_exporter.collector.systemd.enable_task_metrics') %> \
       --collector.systemd.enable-task-metrics \
@@ -149,7 +168,7 @@ case $1 in
       <% if_p('node_exporter.collector.vmstat.fields') do |fields| %> \
       --collector.vmstat.fields="<%= fields %>" \
       <% end %> \
-      <% if_p('node_exporter.collector.collector.wifi.fixtures') do |fixtures| %> \
+      <% if_p('node_exporter.collector.wifi.fixtures') do |fixtures| %> \
       --collector.wifi.fixtures="<%= fixtures %>" \
       <% end %> \
       <% collectors.each do |collector| %> \

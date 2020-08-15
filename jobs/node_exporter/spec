@@ -9,6 +9,10 @@ templates:
   config/role.prom: config/role.prom
 
 properties:
+  node_exporter.collector.cpu.info:
+    description: "Enables metric cpu_info"
+    default: false
+
   node_exporter.collector.diskstats.ignored_devices:
     description: "Regexp of devices to ignore for diskstats"
 
@@ -20,8 +24,10 @@ properties:
   node_exporter.collector.netclass.ignored_devices:
     description: "Regexp of net devices to ignore for netclass collector"
 
-  node_exporter.collector.netdev.ignored_devices:
-    description: "Regexp of net devices to ignore for netdev collector"
+  node_exporter.collector.netdev.device_blacklist:
+    description: "Regexp of net devices to blacklist"
+  node_exporter.collector.netdev.device_whitelist:
+    description: "Regexp of net devices to whitelist"
 
   node_exporter.collector.netstat.fields:
     description: "Regexp of fields to return for netstat collector"
@@ -47,7 +53,15 @@ properties:
   node_exporter.path.rootfs:
     description: "rootfs mountpoint"
 
-  node_exporter.qdisc.fixtures:
+  node_exporter.collector.perf.cpus:
+    description: "List of CPUs from which perf metrics should be collected"
+  node_exporter.collector.perf.tracepoint:
+    description: "perf tracepoint that should be collected"
+
+  node_exporter.collector.powersupply.ignored_supplies:
+    description: "Regexp of power supplies to ignore for powersupplyclass collector"
+
+  node_exporter.collector.qdisc.fixtures:
     description: "test fixtures to use for qdisc collector end-to-end testing"
 
   node_exporter.collector.runit.service_dir:
@@ -73,7 +87,7 @@ properties:
   node_exporter.collector.vmstat.fields:
     description: "Regexp of fields to return for vmstat collector"
 
-  node_exporter.collector.collector.wifi.fixtures:
+  node_exporter.collector.wifi.fixtures:
     description: "test fixtures to use for wifi collector metrics"
 
   node_exporter.collector.arp.enabled:
@@ -84,6 +98,9 @@ properties:
     default: true
   node_exporter.collector.bonding.enabled:
     description: "Enable the bonding collector (default: enabled)"
+    default: true
+  node_exporter.collector.btrfs.enabled:
+    description: "Enable the btrfs collector (default: enabled)"
     default: true
   node_exporter.collector.buddyinfo.enabled:
     description: "Enable the buddyinfo collector (default: disabled)"
@@ -169,6 +186,9 @@ properties:
   node_exporter.collector.perf.enabled:
     description: "Enable the perf collector (default: disabled)"
     default: false
+  node_exporter.collector.powersupplyclass.enabled:
+    description: "Enable the powersupplyclass collector (default: enabled)"
+    default: true
   node_exporter.collector.pressure.enabled:
     description: "Enable the pressure collector (default: enabled)"
     default: true
@@ -178,11 +198,20 @@ properties:
   node_exporter.collector.qdisc.enabled:
     description: "Enable the qdisc collector (default: disabled)"
     default: false
+  node_exporter.collector.rapl.enabled:
+    description: " Enable the rapl collector (default: enabled)"
+    default: true
   node_exporter.collector.runit.enabled:
     description: "Enable the runit collector (default: disabled)"
     default: false
+  node_exporter.collector.schedstat.enabled:
+    description: "Enable the schedstat collector (default: enabled)"
+    default: true
   node_exporter.collector.sockstat.enabled:
     description: "Enable the sockstat collector (default: enabled)"
+    default: true
+  node_exporter.collector.softnet.enabled:
+    description: "Enable the softnet collector (default: enabled)"
     default: true
   node_exporter.collector.stat.enabled:
     description: "Enable the stat collector (default: enabled)"
@@ -199,11 +228,17 @@ properties:
   node_exporter.collector.textfile.enabled:
     description: "Enable the textfile collector (default: enabled)"
     default: true
+  node_exporter.collector.thermal_zone.enabled:
+    description: "Enable the thermal_zone collector (default: enabled)"
+    default: true
   node_exporter.collector.time.enabled:
     description: "Enable the time collector (default: enabled)"
     default: true
   node_exporter.collector.timex.enabled:
     description: "Enable the timex collector (default: enabled)"
+    default: true
+  node_exporter.collector.udp_queues.enabled:
+    description: "nable the udp_queues collector (default: enabled)"
     default: true
   node_exporter.collector.uname.enabled:
     description: "Enable the uname collector (default: enabled)"
