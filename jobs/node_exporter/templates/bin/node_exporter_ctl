@@ -91,8 +91,14 @@ case $1 in
       <% if_p('node_exporter.collector.filesystem.ignored_mount_points') do |ignored_mount_points| %> \
       --collector.filesystem.ignored-mount-points="<%= ignored_mount_points %>" \
       <% end %> \
+      <% if_p('node_exporter.collector.filesystem.mount_points_exclude') do |mount_points_exclude| %> \
+      --collector.filesystem.mount-points-exclude="<%= mount_points_exclude %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.filesystem.ignored_fs_types') do |ignored_fs_types| %> \
       --collector.filesystem.ignored-fs-types="<%= ignored_fs_types %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.filesystem.fs_types_exclude') do |fs_types_exclude| %> \
+      --collector.filesystem.fs-types-exclude="<%= fs_types_exclude %>" \
       <% end %> \
       <% if_p('node_exporter.collector.netclass.ignored_devices') do |ignored_devices| %> \
       --collector.netclass.ignored-devices="<%= ignored_devices %>" \
