@@ -131,8 +131,8 @@ properties:
     description: "Enable the entropy collector (default: enabled)"
     default: true
   node_exporter.collector.ethtool.enabled:
-    description: "Enable the ethtool collector (default: enabled)"
-    default: true
+    description: "Enable the ethtool collector (default: disabled)"
+    default: false
   node_exporter.collector.filefd.enabled:
     description: "Enable the filefd collector (default: enabled)"
     default: true
