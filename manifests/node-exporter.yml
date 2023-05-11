@@ -28,6 +28,6 @@ stemcells:
 
 releases:
 - name: node-exporter
-  version: 5.1.0
-  url: https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v5.1.0/node-exporter-5.1.0.tgz
-  sha1: 7d660990d08bc2eb71c2afc6498181e4a595a202
+  version: 5.2.0
+  url: https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v5.2.0/node-exporter-5.2.0.tgz
+  sha1: ebed686ed9f2e8e2b6f505862ea1fccfe1e2a880
