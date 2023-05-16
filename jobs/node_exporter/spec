@@ -5,8 +5,12 @@ packages:
   - node_exporter
 
 templates:
-  bin/node_exporter_ctl: bin/node_exporter_ctl
-  config/role.prom: config/role.prom
+  bin/node_exporter_ctl.erb: bin/node_exporter_ctl
+  config/role.prom.erb: config/role.prom
+  config/web-config.yml.erb: config/web-config.yml
+  certs/node-exporter-cacert.pem.erb: certs/node-exporter-cacert.pem
+  certs/node-exporter-cert.pem.erb: certs/node-exporter-cert.pem
+  certs/node-exporter-key.pem.erb: certs/node-exporter-key.pem
 
 properties:
   node_exporter.collector.cpu.info:
@@ -273,6 +277,30 @@ properties:
     default: false
   node_exporter.web.max_requests:
     description: "Maximum number of parallel scrape requests"
+
+  node_exporter.tls_server_config.enabled:
+    description: "Serve metrics over https (default: disabled)"
+    default: false
+  node_exporter.tls_server_config.cert:
+    description: "Server certificate in PEM format"
+  node_exporter.tls_server_config.key:
+    description: "Server key in PEM format"
+  node_exporter.tls_server_config.client_auth_type:
+    description: "Server policy for client auth (ref: https://golang.org/pkg/crypto/tls/#ClientAuthType)"
+  node_exporter.tls_server_config.ca_cert:
+    description: "CA Certificate in PEM format"
+  node_exporter.tls_server_config.min_tls:
+    description: "Minimum TLS version"
+  node_exporter.tls_server_config.max_tls:
+    description: "Maxium TLS version"
+  node_exporter.tls_server_config.ciphers:
+    description: "TLS cipher list (ref: https://golang.org/pkg/crypto/tls/#pkg-constants)"
+  node_exporter.tls_server_config.ciphers_prefer_server:
+    description: "Prefer server's cipher list"
+  node_exporter.tls_server_config.curves:
+    description: "TLS elyptic curves (ref: https://golang.org/pkg/crypto/tls/#CurveID)"
+  node_exporter.http_server_config.http2_enabled:
+    description: "http2 enabled"
 
   node_exporter.log.level:
     description: "Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]"
