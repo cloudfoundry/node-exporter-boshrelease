@@ -1,0 +1,45 @@
+#ref: https://github.com/prometheus/exporter-toolkit/blob/v0.1.0/https/README.md
+<%=
+
+web_config = {}
+web_config['tls_server_config'] = {}
+
+web_config['tls_server_config']['cert_file'] = '/var/vcap/jobs/node_exporter/certs/node-exporter-cert.pem'
+web_config['tls_server_config']['key_file'] = '/var/vcap/jobs/node_exporter/certs/node-exporter-key.pem'
+
+if_p('node_exporter.tls_server_config.ca_cert') do
+  web_config['tls_server_config']['client_ca_file'] = '/var/vcap/jobs/node_exporter/certs/node-exporter-cacert.pem'
+end
+
+if_p('node_exporter.tls_server_config.client_auth_type') do |client_auth_type|
+  web_config['tls_server_config']['client_auth_type'] = client_auth_type
+end
+
+if_p('node_exporter.tls_server_config.min_tls') do |min_tls|
+  web_config['tls_server_config']['min_version'] = min_tls
+end
+
+if_p('node_exporter.tls_server_config.max_tls') do |max_tls|
+  web_config['tls_server_config']['max_version'] = max_tls
+end
+
+if_p('node_exporter.tls_server_config.ciphers') do |ciphers|
+  web_config['tls_server_config']['cipher_suites'] = ciphers.split(",")
+end
+
+if_p('node_exporter.tls_server_config.ciphers_prefer_server') do |ciphers_prefer_server|
+  web_config['tls_server_config']['prefer_server_cipher_suites'] = ciphers_prefer_server
+end
+
+if_p('node_exporter.tls_server_config.curves') do |curves|
+  web_config['tls_server_config']['curve_preferences'] = curves.split(",")
+end
+
+if_p('node_exporter.http_server_config.http2_enabled') do |http2_enabled|
+  web_config['http_server_config'] = {}
+  web_config['http_server_config']['http2'] = http2_enabled
+end
+
+YAML.dump(web_config)
+
+%>

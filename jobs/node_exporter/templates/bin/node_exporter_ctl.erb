@@ -17,64 +17,64 @@ exec 2>> ${LOG_DIR}/$(basename "$0").stderr.log
 export PATH=/var/vcap/packages/node_exporter/bin:${PATH}
 
 <%
-    collectors = %w|
-      arp
-      bcache
-      bonding
-      btrfs
-      buddyinfo
-      conntrack
-      cpu
-      cpufreq
-      diskstats
-      drbd
-      edac
-      entropy
-      ethtool
-      filefd
-      filesystem
-      hwmon
-      infiniband
-      interrupts
-      ipvs
-      ksmd
-      loadavg
-      logind
-      mdadm
-      meminfo
-      meminfo_numa
-      mountstats
-      netclass
-      netdev
-      netstat
-      nfs
-      nfsd
-      ntp
-      perf
-      powersupplyclass
-      pressure
-      processes
-      qdisc
-      rapl
-      runit
-      schedstat
-      sockstat
-      softnet
-      stat
-      supervisord
-      systemd
-      tcpstat
-      textfile
-      thermal_zone
-      time
-      timex
-      udp_queues
-      uname
-      vmstat
-      wifi
-      xfs
-      zfs
-    |
+    collectors = [
+      "arp",
+      "bcache",
+      "bonding",
+      "btrfs",
+      "buddyinfo",
+      "conntrack",
+      "cpu",
+      "cpufreq",
+      "diskstats",
+      "drbd",
+      "edac",
+      "entropy",
+      "ethtool",
+      "filefd",
+      "filesystem",
+      "hwmon",
+      "infiniband",
+      "interrupts",
+      "ipvs",
+      "ksmd",
+      "loadavg",
+      "logind",
+      "mdadm",
+      "meminfo",
+      "meminfo_numa",
+      "mountstats",
+      "netclass",
+      "netdev",
+      "netstat",
+      "nfs",
+      "nfsd",
+      "ntp",
+      "perf",
+      "powersupplyclass",
+      "pressure",
+      "processes",
+      "qdisc",
+      "rapl",
+      "runit",
+      "schedstat",
+      "sockstat",
+      "softnet",
+      "stat",
+      "supervisord",
+      "systemd",
+      "tcpstat",
+      "textfile",
+      "thermal_zone",
+      "time",
+      "timex",
+      "udp_queues",
+      "uname",
+      "vmstat",
+      "wifi",
+      "xfs",
+      "zfs"
+    ]
 %>
 
 case $1 in
@@ -198,6 +198,9 @@ case $1 in
       <% end %> \
       <% if_p('node_exporter.log.format') do |format| %> \
       --log.format="<%= format %>" \
+      <% end %> \
+      <% if p('node_exporter.tls_server_config.enabled') %> \
+       <%= "--web.config.file=/var/vcap/jobs/node_exporter/config/web-config.yml" %> \
       <% end %> \
       >>  ${LOG_DIR}/node_exporter.stdout.log \
       2>> ${LOG_DIR}/node_exporter.stderr.log
