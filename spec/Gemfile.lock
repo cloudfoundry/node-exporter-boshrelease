@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    bosh-template (2.0.0)
+    bosh-template (2.4.0)
       semi_semantic (~> 1.2.0)
     diff-lcs (1.5.0)
     json (2.6.3)
@@ -22,7 +22,7 @@ GEM
     yaml (0.2.1)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   bosh-template
@@ -31,7 +31,7 @@ DEPENDENCIES
   yaml
 
 RUBY VERSION
-   ruby 2.7.3p183
+   ruby 3.2.2p53
 
 BUNDLED WITH
-   2.1.4
+   2.4.10
