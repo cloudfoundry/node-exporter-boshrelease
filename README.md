@@ -44,6 +44,15 @@ Once runtime config is updated it will applied to all new deployments (the exist
 
 Refer to [CONTRIBUTING.md](https://github.com/bosh-prometheus/node-exporter-boshrelease/blob/master/CONTRIBUTING.md).
 
+## Run tests
+
+```sh
+$ docker run -ti --rm -v$(pwd):/repo ruby:3.2 /bin/bash
+# cd /repo/spec
+# bundler install
+# bundle exec rspec .
+```
+
 ## License
 
 Apache License 2.0, see [LICENSE](https://github.com/bosh-prometheus/node-exporter-boshrelease/blob/master/LICENSE).
