@@ -34,6 +34,46 @@ describe 'node_exporter job' do
       {
         'node_exporter' => {
           'collector' => {
+            'dmi' => {
+              'enabled' => false
+            },
+            'fibrechannel' => {
+              'enabled' => false
+            },
+            'nvme' => {
+              'enabled' => false
+            },
+            'os' => {
+              'enabled' => false
+            },
+            'selinux' => {
+              'enabled' => false
+            },
+            'tapestats' => {
+              'enabled' => false
+            }
+          }
+        }
+      }
+    end
+
+    it 'renders with ethtool disabled' do
+      expect(rendered_template).to include("--no-collector.dmi")
+      expect(rendered_template).to include("--no-collector.fibrechannel")
+      expect(rendered_template).to include("--no-collector.nvme")
+      expect(rendered_template).to include("--no-collector.os")
+      expect(rendered_template).to include("--no-collector.selinux")
+      expect(rendered_template).to include("--no-collector.tapestats")
+    end
+  end
+
+  describe 'bin/node_exporter_ctl template' do
+    let(:template) { job.template('bin/node_exporter_ctl') }
+    let(:rendered_template) { template.render(properties) }
+    let(:properties) do
+      {
+        'node_exporter' => {
+          'collector' => {
             'ethtool' => {
               'enabled' => false
             }
