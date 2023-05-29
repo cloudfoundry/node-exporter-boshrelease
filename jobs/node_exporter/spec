@@ -125,9 +125,15 @@ properties:
   node_exporter.collector.diskstats.enabled:
     description: "Enable the diskstats collector (default: enabled)"
     default: true
+  node_exporter.collector.dmi.enabled:
+    description: "Enable the dmi collector (default: enabled)"
+    default: true
   node_exporter.collector.drbd.enabled:
     description: "Enable the drbd collector (default: disabled)"
     default: false
+  node_exporter.collector.fibrechannel.enabled:
+    description: "Enable the fibrechannel collector (default: enabled)"
+    default: true
   node_exporter.collector.edac.enabled:
     description: "Enable the edac collector (default: enabled)"
     default: true
@@ -194,6 +200,12 @@ properties:
   node_exporter.collector.ntp.enabled:
     description: "Enable the ntp collector (default: disabled)"
     default: false
+  node_exporter.collector.nvme.enabled:
+    description: "Enable the nvme collector (default: enabled)"
+    default: true
+  node_exporter.collector.os.enabled:
+    description: "Enable the os collector (default: enabled)"
+    default: true
   node_exporter.collector.perf.enabled:
     description: "Enable the perf collector (default: disabled)"
     default: false
@@ -218,6 +230,9 @@ properties:
   node_exporter.collector.schedstat.enabled:
     description: "Enable the schedstat collector (default: enabled)"
     default: true
+  node_exporter.collector.selinux.enabled:
+    description: "Enable the selinux collector (default: enabled)"
+    default: true
   node_exporter.collector.sockstat.enabled:
     description: "Enable the sockstat collector (default: enabled)"
     default: true
@@ -233,6 +248,9 @@ properties:
   node_exporter.collector.systemd.enabled:
     description: "Enable the systemd collector (default: disabled)"
     default: false
+  node_exporter.collector.tapestats.enabled:
+    description: "Enable the tapestats collector (default: enabled)"
+    default: true
   node_exporter.collector.tcpstat.enabled:
     description: "Enable the tcpstat collector (default: disabled)"
     default: false
