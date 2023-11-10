@@ -23,11 +23,11 @@ update:
 
 stemcells:
   - alias: default
-    os: ubuntu-xenial
+    os: ubuntu-jammy
     version: latest
 
 releases:
 - name: node-exporter
-  version: 5.4.0
-  url: https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v5.4.0/node-exporter-5.4.0.tgz
-  sha1: dcb1485878b642d23f66cd5789178694bbfda3c2
+  version: 5.5.0
+  url: https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v5.5.0/node-exporter-5.5.0.tgz
+  sha1: e013bead7ca3d0128a56dc71b1294fa0d75eea36
