@@ -110,6 +110,9 @@ case $1 in
       <% if_p('node_exporter.collector.netclass.ignored_devices') do |ignored_devices| %> \
       --collector.netclass.ignored-devices="<%= ignored_devices %>" \
       <% end %> \
+      <% if_p('node_exporter.collector.netdev.address_info') do |address_info| %> \
+      --collector.netdev.address-info="<%= address_info %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.netdev.device_blacklist') do |device_blacklist| %> \
       --collector.netdev.device-blacklist="<%= device_blacklist %>" \
       <% end %> \
