@@ -36,6 +36,9 @@ properties:
     description: "Regexp of net devices to blacklist"
   node_exporter.collector.netdev.device_whitelist:
     description: "Regexp of net devices to whitelist"
+  node_exporter.collector.netdev.address_info:
+    description: "Collect address-info for every device (default false)"
+    default: false
 
   node_exporter.collector.netstat.fields:
     description: "Regexp of fields to return for netstat collector"
