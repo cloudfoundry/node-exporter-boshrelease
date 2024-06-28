@@ -1,0 +1,21 @@
+name: node-exporter
+version: 5.6.0
+commit_hash: 9954bda
+uncommitted_changes: false
+jobs:
+- name: node_exporter
+  version: 10a7ef1644440315d62acdd18b26643053304ccb20099a2347b888e3dff30e57
+  fingerprint: 10a7ef1644440315d62acdd18b26643053304ccb20099a2347b888e3dff30e57
+  sha1: sha256:ec75dc48e837bab600948dc4e081c4ce0bd7171b70b5108dcb8cd671bd2751e9
+  packages:
+  - node_exporter
+packages:
+- name: node_exporter
+  version: 31e7b113a611fec8b40439beb06f6814f665508f9c755a06f3f0c5c675a21361
+  fingerprint: 31e7b113a611fec8b40439beb06f6814f665508f9c755a06f3f0c5c675a21361
+  sha1: sha256:48a3aa83cb23474a88493c8013f2cb8e6249e6fbb08c6d0f16eac2831ac8d7ec
+  dependencies: []
+license:
+  version: 66c060511aff75e4934360dfd25faf9e7013acd9527d68be7a8f4f7306d33a75
+  fingerprint: 66c060511aff75e4934360dfd25faf9e7013acd9527d68be7a8f4f7306d33a75
+  sha1: sha256:f79f5680cc9913b1641e85cb702b1b100b78a0772fdc01c5c1e20e70d01e55f7
