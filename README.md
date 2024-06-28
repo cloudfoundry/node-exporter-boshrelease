@@ -10,7 +10,7 @@ To use this BOSH release, first upload it to your BOSH:
 
 ```
 export BOSH_ENVIRONMENT=<name>
-bosh upload-release https://github.com/bosh-prometheus/node-exporter-boshrelease/releases/download/v5.0.0/node-exporter-5.0.0.tgz
+bosh upload-release https://github.com/cloudfoundry/node-exporter-boshrelease/releases/download/v5.0.0/node-exporter-5.0.0.tgz
 ```
 
 Then create a runtime configuration file:
@@ -42,7 +42,7 @@ Once runtime config is updated it will applied to all new deployments (the exist
 
 ## Contributing
 
-Refer to [CONTRIBUTING.md](https://github.com/bosh-prometheus/node-exporter-boshrelease/blob/master/CONTRIBUTING.md).
+Refer to [CONTRIBUTING.md](https://github.com/cloudfoundry/node-exporter-boshrelease/blob/master/CONTRIBUTING.md).
 
 ## Run tests
 
@@ -55,4 +55,4 @@ $ docker run -ti --rm -v$(pwd):/repo ruby:3.2 /bin/bash
 
 ## License
 
-Apache License 2.0, see [LICENSE](https://github.com/bosh-prometheus/node-exporter-boshrelease/blob/master/LICENSE).
+Apache License 2.0, see [LICENSE](https://github.com/cloudfoundry/node-exporter-boshrelease/blob/master/LICENSE).
