@@ -1,7 +1,7 @@
 ---
 
 groups:
-  - name: node-exporter-release
+  - name: node-exporter-boshrelease
     jobs:
       - unit-tests
       - unit-tests-pr
@@ -353,14 +353,14 @@ resources:
   - name: git
     type: git
     source:
-      uri:         git@github.com:cloudfoundry/node-exporter-release.git
+      uri:         git@github.com:cloudfoundry/node-exporter-boshrelease.git
       branch:      master
 
   - name: git-pull-requests
     type: pull-request
     source:
       access_token: ((github.token))
-      repository:   cloudfoundry/node-exporter-release
+      repository:   cloudfoundry/node-exporter-boshrelease
       base_branch:  master
       labels:       [run-ci]
 
