@@ -373,4 +373,4 @@ resources:
   - name: stemcell-noble
     type: bosh-io-stemcell
     source:
-      name: bosh-warden-boshlite-ubuntu-noble-go_agent
+      name: bosh-warden-boshlite-ubuntu-noble
