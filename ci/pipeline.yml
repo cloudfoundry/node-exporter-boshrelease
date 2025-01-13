@@ -271,7 +271,7 @@ jobs:
             RELEASE_ROOT: gh
             REPO_OUT:     pushme
             NOTIFICATION_OUT: notifications
-            BRANCH:        main
+            BRANCH:        master
             GITHUB_OWNER:  cloudfoundry
 
 #   #TODO        GCP_SERVICE_KEY: ((gcp.service_key))
@@ -354,14 +354,14 @@ resources:
     type: git
     source:
       uri:         git@github.com:cloudfoundry/node-exporter-release.git
-      branch:      main
+      branch:      master
 
   - name: git-pull-requests
     type: pull-request
     source:
       access_token: ((github.token))
       repository:   cloudfoundry/node-exporter-release
-      base_branch:  main
+      base_branch:  master
       labels:       [run-ci]
 
   - name: stemcell
