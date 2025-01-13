@@ -1,0 +1,375 @@
+---
+
+groups:
+  - name: node-exporter-release
+    jobs:
+      - unit-tests
+      - unit-tests-pr
+      - acceptance-tests
+      - acceptance-tests-pr
+      - pre
+      - rc
+      - shipit
+      - patch
+      - minor
+      - major
+
+jobs:
+  - name: unit-tests
+    public: true
+    serial: true
+    plan:
+    - do:
+      - get: git
+        trigger: true
+      - task: unit-tests
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: bguttmannavtq/pipeline-image
+              tag:        latest
+          inputs:
+            - { name: git }
+          caches:
+          - path: git/vendor/cache
+          - path: git/.bundle
+          run:
+            path: ./git/ci/scripts/unit-tests
+            args: []
+          params:
+            REPO_ROOT: git
+      on_failure:
+        put: notify
+        params:
+          channel:  "#prometheus"
+          username: ci-bot
+  - name: unit-tests-pr
+    public: true
+    serial: true
+    plan:
+    - do:
+      - { get: git-pull-requests, trigger: true, version: every }
+      - put: git-pull-requests
+        params:
+          path: git-pull-requests
+          status: pending
+          context: unit-tests
+      - task: unit-tests
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: bguttmannavtq/pipeline-image
+              tag:        latest
+          inputs:
+            - { name: git-pull-requests }
+          caches:
+          - path: git-pull-requests/vendor/cache
+          - path: git-pull-requests/.bundle
+          run:
+            path: ./git-pull-requests/ci/scripts/unit-tests
+            args: []
+          params:
+            REPO_ROOT: git-pull-requests
+    on_success:
+      put: git-pull-requests
+      params:
+        path: git-pull-requests
+        status: success
+        context: unit-tests
+    on_failure:
+      put: git-pull-requests
+      params:
+        path: git-pull-requests
+        status: failure
+        context: unit-tests
+
+  - name: acceptance-tests
+    public: true
+    serial: true
+    plan:
+    - do:
+      - in_parallel:
+        - { get: git, trigger: true, passed: [unit-tests] }
+        - { get: stemcell }
+        - { get: stemcell-noble }
+      - task: acceptance-tests
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: bguttmannavtq/pipeline-image
+              tag:        latest
+          inputs:
+            - { name: git }
+            - { name: stemcell }
+            - { name: stemcell-noble }
+          run:
+            path: ./git/ci/scripts/acceptance-tests
+            args: []
+          params:
+            REPO_ROOT:            git
+      on_failure:
+        put: notify
+        params:
+          channel:  "#prometheus"
+          username: ci-bot
+
+  - name: acceptance-tests-pr
+    public: true
+    serial: true
+    plan:
+    - do:
+      - { get: git-pull-requests, trigger: true, version: every, passed: [unit-tests-pr] }
+      - { get: stemcell }
+      - { get: stemcell-noble }
+      - put: git-pull-requests
+        params:
+          path: git-pull-requests
+          status: pending
+          context: acceptance-tests
+      - task: acceptance-tests
+        privileged: true
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: bguttmannavtq/pipeline-image
+              tag:        latest
+          inputs:
+            - { name: git-pull-requests }
+            - { name: stemcell }
+            - { name: stemcell-noble }
+          run:
+            path: ./git-pull-requests/ci/scripts/acceptance-tests
+            args: []
+          params:
+            REPO_ROOT: git-pull-requests
+    on_success:
+      put: git-pull-requests
+      params:
+        path: git-pull-requests
+        status: success
+        context: acceptance-tests
+    on_failure:
+      put: git-pull-requests
+      params:
+        path: git-pull-requests
+        status: failure
+        context: acceptance-tests
+
+  - name: pre
+    public: true
+    serial: true
+    plan:
+    - do:
+      - get: git
+        passed:
+        - acceptance-tests
+        trigger: true
+      - get: version
+        trigger: true
+      - task: release-notes
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: bguttmannavtq/pipeline-image
+              tag:        latest
+          run:
+            path: sh
+            args:
+            - -ce
+            - |
+              cd git
+              if [ -f ci/release_notes.md ]; then
+                echo "######   RELEASE NOTES   ###############"
+                echo
+                cat ci/release_notes.md
+                echo
+                echo "########################################"
+                echo
+              else
+                echo "NO RELEASE NOTES HAVE BEEN WRITTEN"
+                echo "You *might* want to do that before"
+                echo "hitting (+) on that shipit job..."
+                echo
+              fi
+          inputs:
+          - name: git
+      on_failure:
+        put: notify
+        params:
+          channel:  "#prometheus"
+          username: ci-bot
+          text: release candidate job 'pre' failed (which is unusual).
+          ok: false
+
+  - name: rc
+    public: true
+    plan:
+    - do:
+      - in_parallel:
+          - { get: git,     trigger: true,  passed: [pre] }
+          - { get: version, trigger: false, params: {pre: rc} }
+      - put: version
+        params: {file: version/number}
+      on_failure:
+        put: notify
+        params:
+          channel:  "#prometheus"
+          username: ci-bot
+
+  - name: patch
+    public: true
+    plan:
+      - do:
+          - { get: version, trigger: false, params: {bump: patch} }
+          - { put: version,                 params: {file: version/number} }
+        on_failure:
+          put: notify
+          params:
+            channel:  "#prometheus"
+            username: ci-bot
+
+  - name: shipit
+    public: true
+    serial: true
+    plan:
+    - do:
+      - in_parallel:
+          - { get: version, passed: [rc], params: {bump: final} }
+          - { get: git,     passed: [rc] }
+      - task: release
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: bguttmannavtq/pipeline-image
+              tag:        latest
+          inputs:
+            - name: version
+            - name: git
+          outputs:
+            - name: gh
+            - name: pushme
+            - name: notifications
+          run:
+            path: ./git/ci/scripts/shipit
+            args: []
+          params:
+            REPO_ROOT:    git
+            VERSION_FROM: version/number
+            RELEASE_ROOT: gh
+            REPO_OUT:     pushme
+            NOTIFICATION_OUT: notifications
+            BRANCH:        main
+            GITHUB_OWNER:  cloudfoundry
+
+#   #TODO        GCP_SERVICE_KEY: ((gcp.service_key))
+#     - put: git
+#       params:
+#         rebase: true
+#         repository: pushme/git
+#     - put: blobstore
+#       params:
+#         file:  "gh/artifacts/node-exporter-*.tgz"
+#     - put: github
+#       params:
+#         name:   gh/name
+#         tag:    gh/tag
+#         body:   gh/notes.md
+#         globs: [gh/artifacts/*, gh/artifacts-patched/*]
+#     - put: notify
+#       params:
+#         channel:  "#prometheus"
+#         username: ci-bot
+#         text_file: notifications/message
+#     on_failure:
+#       put: notify
+#       params:
+#         channel:  "#prometheus"
+#         username: ci-bot
+
+  - name: minor
+    public: true
+    plan:
+    - do:
+      - { get: version, trigger: false, params: {bump: minor} }
+      - { put: version,                 params: {file: version/number} }
+      on_failure:
+        put: notify
+        params:
+          channel:  "#prometheus"
+          username: ci-bot
+
+  - name: major
+    public: true
+    plan:
+    - do:
+      - { get: version, trigger: false, params: {bump: major} }
+      - { put: version,                 params: {file: version/number} }
+      on_failure:
+        put: notify
+        params:
+          channel:  "#prometheus"
+          username: ci-bot
+
+resource_types:
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+
+  - name: pull-request
+    type: docker-image
+    source:
+      repository: teliaoss/github-pr-resource
+
+resources:
+  - name: version
+    type: semver
+    source :
+      driver: s3
+      bucket: node-exporter-boshrelease
+      access_key_id: ((s3.access_key_id))
+      secret_access_key: ((s3.secret_access_key))
+      key: version
+      initial_version: "5.6.0"
+
+  - name: notify
+    type: slack-notification
+    source:
+      url: ((slack.url))
+
+  - name: git
+    type: git
+    source:
+      uri:         git@github.com:cloudfoundry/node-exporter-release.git
+      branch:      main
+
+  - name: git-pull-requests
+    type: pull-request
+    source:
+      access_token: ((github.token))
+      repository:   cloudfoundry/node-exporter-release
+      base_branch:  main
+      labels:       [run-ci]
+
+  - name: stemcell
+    type: bosh-io-stemcell
+    source:
+      name: bosh-warden-boshlite-ubuntu-jammy-go_agent
+
+  - name: stemcell-noble
+    type: bosh-io-stemcell
+    source:
+      name: bosh-warden-boshlite-ubuntu-noble-go_agent
