@@ -1,0 +1,65 @@
+#!/bin/bash
+
+set -e
+
+stemcell_jammy_path=$PWD/stemcell/*.tgz
+
+if [ -n "$FOCUS" ]; then
+  echo "------------------------------------------------------------------"
+  echo "FOCUS is set. Will only run tests matching '$FOCUS'"
+  echo "Docker won't be stopped afterwards, so you can debug the test."
+  echo "------------------------------------------------------------------"
+  ADDITIONAL_ARGS=("--focus" "$FOCUS")
+fi
+
+cd "${REPO_ROOT:?required}"
+echo "----- Pulling in any git submodules..."
+git submodule update --init --recursive --force
+
+# shellcheck disable=SC1091
+source "ci/scripts/skip-ci.sh"
+if [ -f ".git/resource/changed_files" ]; then
+  if skip_ci "ci/.ci-ignore" ".git/resource/changed_files"; then
+    echo "SKIP TEST: Only .ci-ignored changes found."
+    exit 0
+  else
+    echo "RUN TEST: There is at least one non-ignored change found."
+  fi
+fi
+echo "----- Starting BOSH"
+
+./ci/scripts/start-bosh.sh
+
+function stop_docker() {
+  echo "----- stopping docker"
+  service docker stop
+}
+
+if [ -z "$FOCUS" ]; then
+  trap stop_docker EXIT
+fi
+
+# shellcheck disable=SC1091
+source /tmp/local-bosh/director/env
+
+echo "----- Creating candidate BOSH release..."
+bosh -n reset-release # in case dev_releases/ is in repo accidentally
+
+bosh create-release
+bosh upload-release --rebase
+release_final_version=$(spruce json dev_releases/*/index.yml | jq -r ".builds[].version" | sed -e "s%+.*%%")
+export RELEASE_VERSION="${release_final_version}.latest"
+echo "----- Created ${RELEASE_VERSION}"
+
+echo "----- Uploading Jammy stemcell"
+bosh -n upload-stemcell $stemcell_jammy_path
+
+echo "----- Uploading os-conf (used for tests only)"
+bosh -n upload-release --sha1 386293038ae3d00813eaa475b4acf63f8da226ef \
+  https://bosh.io/d/github.com/cloudfoundry/os-conf-release?v=22.1.2
+
+# shellcheck disable=SC2155
+export BOSH_PATH=$(which bosh)
+export BASE_MANIFEST_PATH="$PWD/manifests/node-exporter.yml"
+
+${BOSH_PATH} deploy -d node-exporter ${BASE_MANIFEST_PATH} -o $PWD/ci/ops/use-latest-release.yml -n 
