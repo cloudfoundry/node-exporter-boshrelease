@@ -290,6 +290,18 @@ class GithubDependency(Dependency):
 
         return latest_release
 
+def wget(url: str, path: str, auth: Optional[Tuple[str, str]] = None):
+    """
+    downloads a file, optionally decoding any compression applied on HTTP level
+    """
+    with requests.get(url, stream=True, allow_redirects=True, auth=auth) as resp:
+        if resp.status_code != 200:
+            raise Exception(f"request failed {resp.status_code}")
+        # see https://github.com/psf/requests/issues/2155#issuecomment-50771010
+        resp.raw.read = functools.partial(resp.raw.read, decode_content=True)
+        with open(path, "wb") as file:
+            shutil.copyfileobj(resp.raw, file)
+
 def write_private_yaml():
     """
     Writes private.yml to config subdirectory (used for blobstore/s3 authentication)
