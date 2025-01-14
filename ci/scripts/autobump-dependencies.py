@@ -274,13 +274,16 @@ class GithubDependency(Dependency):
             print(f"current_version {current_version}")
             if latest_version < current_version and current_raw.startswith(self.pinned_version):
                 print("inside the loop")
+                print(f"latest_version {latest_version}")
                 latest_version = current_version
+                print(f"latest_version {latest_version}")
                 latest_release = Release(
                     rel.title,
                     get_release_download_url(rel),
                     f"{self.name}-{str(current_version)}{self.filename_suffix}",
                     current_version,
                 )
+                print(f"latest_release {latest_release}")
 
         if latest_version == version.parse("0.0.0"):
             raise Exception(f"No release found for '{repo}'")
