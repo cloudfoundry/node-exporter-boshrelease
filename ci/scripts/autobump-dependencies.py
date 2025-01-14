@@ -271,7 +271,9 @@ class GithubDependency(Dependency):
             print(f"tag_name {rel.tag_name}, stripped {rel.tag_name.lstrip(self.tagname_prefix)}")
             current_raw = rel.tag_name.lstrip(self.tagname_prefix)
             current_version = version.parse(current_raw)
+            print(f"current_version {current_version}")
             if latest_version < current_version and current_raw.startswith(self.pinned_version):
+                print("inside the loop")
                 latest_version = current_version
                 latest_release = Release(
                     rel.title,
@@ -314,7 +316,7 @@ def main() -> None:
             "NODE_EXPORTER_VERSION",
             NODE_EXPORTER_VERSION,
             "https://github.com/prometheus/node_exporter",
-            tagname_prefix="node_exporter-",
+            tagname_prefix="v",
         ),
     ]
 
