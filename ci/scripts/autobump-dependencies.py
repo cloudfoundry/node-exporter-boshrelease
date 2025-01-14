@@ -248,7 +248,7 @@ class GithubDependency(Dependency):
     filename_suffix: str = ".tar.gz"
 
     def fetch_latest_release(self) -> Release:
-        repo_org_and_name = self.root_url.lstrip("https://github.com/")
+        repo_org_and_name = self.root_url.replace("https://github.com/","")
         # TODO: Remove again
         print(f"repo_org_and_name {repo_org_and_name}")
         repo = gh.get_repo(repo_org_and_name)
