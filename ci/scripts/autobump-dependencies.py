@@ -101,7 +101,7 @@ class Dependency:
     version_var_name: str
     pinned_version: str
     root_url: str
-    package: str = "node-exporter"
+    package: str = "node_exporter"
     remote_repo = gh.get_repo(f"{PR_ORG}/node-exporter-boshrelease")
 
     _latest_release: Optional[Release] = None
