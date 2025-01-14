@@ -332,6 +332,7 @@ def main() -> None:
             NODE_EXPORTER_VERSION,
             "https://github.com/prometheus/node_exporter",
             tagname_prefix="v",
+            filename_suffix=".linux-amd64.tar.gz",
         ),
     ]
 
