@@ -367,14 +367,6 @@ resource_types:
     source:
       repository: cfcommunity/github-pr-resource
 
-  - name: daily
-    type: time
-    source:
-      start: 7:00 AM
-      stop: 8:00 AM
-      location: Europe/Berlin
-      interval: 24h
-
 resources:
   - name: version
     type: semver
@@ -385,6 +377,14 @@ resources:
       secret_access_key: ((s3.secret_access_key))
       key: version
       initial_version: "5.6.0"
+
+  - name: daily
+    type: time
+    source:
+      start: 7:00 AM
+      stop: 8:00 AM
+      location: Europe/Berlin
+      interval: 24h
 
   - name: notify
     type: slack-notification
