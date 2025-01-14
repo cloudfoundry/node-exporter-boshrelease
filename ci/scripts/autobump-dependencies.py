@@ -316,7 +316,9 @@ def main() -> None:
 
     write_private_yaml()
 
+    print(dependencies)
     for dependency in dependencies:
+        print(dependency)
         current_version = dependency.current_version
         latest_release = dependency.latest_release
         latest_version = latest_release.version
