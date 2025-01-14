@@ -22,7 +22,8 @@ from git import Repo
 NODE_EXPORTER_VERSION = "1"
 
 # Required Environment Vars
-BLOBSTORE_SECRET_ACCESS_KEY = os.environ["AWS_SERVICE_KEY"]
+BLOBSTORE_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
+BLOBSTORE_ACCESS_KEY = os.environ["AWS_ACCESS_KEY"]
 gh = github.Github(login_or_token=os.environ["GITHUB_COM_TOKEN"])
 PR_ORG = os.environ["PR_ORG"]
 PR_BASE = os.environ["PR_BASE"]
@@ -287,8 +288,8 @@ def write_private_yaml():
     private_yml = {
         "blobstore": {
             "options": {
-                "credentials_source": "static",
-                "json_key": BLOBSTORE_SECRET_ACCESS_KEY,
+                "secret_access_key": BLOBSTORE_SECRET_ACCESS_KEY,
+                "access_key_id": BLOBSTORE_ACCESS_KEY,
             }
         }
     }

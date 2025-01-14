@@ -352,10 +352,9 @@ jobs:
                 PR_ORG: cloudfoundry
                 PR_LABEL: run-ci
                 DRY_RUN: true
-                GCP_SERVICE_KEY: ((gcp.service_key))
+                AWS_SECRET_ACCESS_KEY: ((s3.secret_access_key))
+                AWS_ACCESS_KEY: ((s3.access_key_id))
                 GITHUB_COM_TOKEN: ((github.access_token))
-
-
 
 resource_types:
   - name: slack-notification
