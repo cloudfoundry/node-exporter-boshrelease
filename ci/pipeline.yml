@@ -13,6 +13,7 @@ groups:
       - patch
       - minor
       - major
+      - autobump-dependencies
 
 jobs:
   - name: unit-tests
@@ -323,6 +324,39 @@ jobs:
           channel:  "#prometheus"
           username: ci-bot
 
+  - name: autobump-dependencies
+    public: true
+    serial: true
+    plan:
+      - do:
+          - get: daily
+            trigger: true
+          - get: git
+          - task: autobump-dependencies
+            config:
+              image_resource:
+                type: docker-image
+                source:
+                  repository: bguttmannavtq/pipeline-image
+                  tag:        latest
+              inputs:
+                - name: git
+              platform: linux
+              run:
+                dir: git
+                path: /usr/bin/python3
+                args: ["ci/scripts/autobump-dependencies.py"]
+              params:
+                REPO_ROOT: git
+                PR_BASE: master
+                PR_ORG: cloudfoundry
+                PR_LABEL: run-ci
+                DRY_RUN: true
+                GCP_SERVICE_KEY: ((gcp.service_key))
+                GITHUB_COM_TOKEN: ((github.access_token))
+
+
+
 resource_types:
   - name: slack-notification
     type: docker-image
@@ -332,7 +366,7 @@ resource_types:
   - name: pull-request
     type: docker-image
     source:
-      repository: teliaoss/github-pr-resource
+      repository: cfcommunity/github-pr-resource
 
 resources:
   - name: version
