@@ -268,7 +268,7 @@ class GithubDependency(Dependency):
             if rel.prerelease:
                 continue
             # TODO: Remove again
-            print(f"tag_name {rel.tag_name}, stripped {rel.tag_name.lstrip(self.tagname_prefix)})"
+            print(f"tag_name {rel.tag_name}, stripped {rel.tag_name.lstrip(self.tagname_prefix)}")
             current_raw = rel.tag_name.lstrip(self.tagname_prefix)
             current_version = version.parse(current_raw)
             if latest_version < current_version and current_raw.startswith(self.pinned_version):
