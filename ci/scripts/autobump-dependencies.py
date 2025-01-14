@@ -147,7 +147,7 @@ class Dependency:
         raise NotImplementedError
 
     def remove_current_blob(self):
-        current_blob_path = f"{self.package}/{self.name}-{self.current_version}.tar.gz"
+        current_blob_path = f"{self.package}/{self.name}-{self.current_version}{self.filename_suffix}"
         if self._check_blob_exists(current_blob_path):
             BoshHelper.remove_blob(current_blob_path)
         else:
