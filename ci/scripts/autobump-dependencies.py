@@ -60,7 +60,7 @@ class BoshHelper:
 
         # run as subprocess and handle errors
 # TODO remove again
-       subprocess.run(cmd_params)
+        subprocess.run(cmd_params)
 # TODO add again
 #        process = subprocess.Popen(cmd_params, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 #        stdout, stderr = process.communicate()
