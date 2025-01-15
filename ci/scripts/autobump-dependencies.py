@@ -87,6 +87,8 @@ class Release:
 
     def add_blob(self, package):
         target_path = f"{package}/{self.file}"
+        #TODO: remove later on
+        print(f"target_path {target_path}")
         BoshHelper.add_blob(self.file, target_path)
 
 
@@ -165,6 +167,8 @@ class Dependency:
         """
         Writes the new dependency version and download-url into packages/haproxy/packaging
         """
+        # TODO: Remove later on
+        print("I am adjusting the packaging information")
         with open(PACKAGING_PATH.format(self.package), "r") as packaging_file:
             replacement = ""
             for line in packaging_file.readlines():
