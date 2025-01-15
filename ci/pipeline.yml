@@ -344,8 +344,8 @@ jobs:
               platform: linux
               run:
                 dir: git
-                path: /usr/bin/python3
-                args: ["ci/scripts/autobump-dependencies.py"]
+                path: bash
+                args: ["ci/scripts/autobump-dependencies.sh"]
               params:
                 REPO_ROOT: git
                 PR_BASE: master

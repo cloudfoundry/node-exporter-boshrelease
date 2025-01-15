@@ -2,13 +2,11 @@
 
 set -eux
 
-NODE_EXPORTER_VERSION=1.8.1 # https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
-
 # Copy common utils
 mkdir -p ${BOSH_INSTALL_TARGET}/common
 cp -a ${BOSH_COMPILE_TARGET}/common/* ${BOSH_INSTALL_TARGET}/common
 
 # Extract node_exporter package
 mkdir -p ${BOSH_INSTALL_TARGET}/bin
-tar xzvf ${BOSH_COMPILE_TARGET}/node_exporter/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz
-cp -a ${BOSH_COMPILE_TARGET}/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64/* ${BOSH_INSTALL_TARGET}/bin
+tar xzvf ${BOSH_COMPILE_TARGET}/node_exporter/node_exporter-1.8.1.linux-amd64.tar.gz
+cp -a ${BOSH_COMPILE_TARGET}/node_exporter-1.8.1.linux-amd64/* ${BOSH_INSTALL_TARGET}/bin
