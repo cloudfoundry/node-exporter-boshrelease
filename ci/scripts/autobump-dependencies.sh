@@ -5,15 +5,15 @@ mkdir /tmp/cache /tmp/prometheus-blobs
 
 export BOSH_VERSION=7.6.1
 
-cd /tmp/cache && curl -sL https://github.com/cloudfoundry/bosh-cli/releases/download/v${BOSH_VERSION}/bosh-cli-${BOSH_VERSION}-linux-amd64 > bosh && chmod 777 bosh
+pushd /tmp/cache && curl -sL https://github.com/cloudfoundry/bosh-cli/releases/download/v${BOSH_VERSION}/bosh-cli-${BOSH_VERSION}-linux-amd64 > bosh && chmod 777 bosh
 
-export LATEST_NODE_EXPORTER_DOWNLOAD_URL=$(curl -sL https://cf-prometheus-ci-bot:${CF_PROM_CI_BOT_TOKEN}@api.github.com/repos/rprometheus/node_exporte/releases/latest | jq -r '.assets[].browser_download_url' | grep 'linux-amd64.tar.gz$')
+export LATEST_NODE_EXPORTER_DOWNLOAD_URL=$(curl -sL https://cf-prometheus-ci-bot:${CF_PROM_CI_BOT_TOKEN}@api.github.com/repos/prometheus/node_exporter/releases/latest | jq -r '.assets[].browser_download_url' | grep 'linux-amd64.tar.gz$')
 echo ${LATEST_NODE_EXPORTER_DOWNLOAD_URL}
 
 export LATEST_NODE_EXPORTER_VERSION=$(curl -sL https://cf-prometheus-ci-bot:${CF_PROM_CI_BOT_TOKEN}@api.github.com/repos/prometheus/node_exporter/releases/latest | jq -r '.tag_name')
 echo ${LATEST_NODE_EXPORTER_VERSION}
 
-cd git
+popd
 
 export USED_NODE_EXPORTER_VERSION=$(cat config/blobs.yml | egrep -o "node_exporter-[[:digit:]]+.[[:digit:]]+.[[:digit:]]+" | cut -d "-" -f 2)
 echo ${USED_NODE_EXPORTER_VERSION}
