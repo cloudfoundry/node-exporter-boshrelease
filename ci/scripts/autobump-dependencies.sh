@@ -26,7 +26,9 @@ fi
 
 /tmp/cache/bosh blobs
 
-sed -i '' -e "s/node_exporter-$USED_NODE_EXPORTER_VERSION\.linux-amd64/node_exporter-$LATEST_NODE_EXPORTER_VERSION\.linux-amd64/g" packages/node_exporter/*
+sed -i -e "s/node_exporter-$USED_NODE_EXPORTER_VERSION\.linux-amd64/node_exporter-$LATEST_NODE_EXPORTER_VERSION\.linux-amd64/g" packages/node_exporter/*
+
+echo $DRY_RUN
 
 if [ ! -z "$DRY_RUN" ]; then
   echo "I would have uploaded blobs" 
