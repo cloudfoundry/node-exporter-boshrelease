@@ -30,7 +30,7 @@ sed -i -e "s/node_exporter-$USED_NODE_EXPORTER_VERSION\.linux-amd64/node_exporte
 
 echo $DRY_RUN
 
-if [ ! -z "$DRY_RUN" ]; then
+if [ -z "$DRY_RUN" ]; then
   echo "I would have uploaded blobs" 
   echo "I would have created a PR"
 fi
