@@ -59,14 +59,17 @@ class BoshHelper:
         print(f"Running '{' '.join(cmd_params)}' ...")
 
         # run as subprocess and handle errors
-        process = subprocess.Popen(cmd_params, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-        stdout, stderr = process.communicate()
-        if stdout:
-            print(stdout.decode("utf-8"), file=sys.stdout)  # we don't expect any stdout under normal behaviour, might be useful for debugging though
-        if stderr:
-            print(stderr.decode("utf-8"), file=sys.stdout)
-        if process.returncode != 0:
-            raise Exception(f"Command {' '.join(cmd_params)} failed. Aborting.")
+# TODO remove again
+         subprocess.run(cmd_params)
+# TODO add again
+#        process = subprocess.Popen(cmd_params, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+#        stdout, stderr = process.communicate()
+#        if stdout:
+#            print(stdout.decode("utf-8"), file=sys.stdout)  # we don't expect any stdout under normal behaviour, might be useful for debugging though
+#        if stderr:
+#            print(stderr.decode("utf-8"), file=sys.stdout)
+#        if process.returncode != 0:
+#            raise Exception(f"Command {' '.join(cmd_params)} failed. Aborting.")
 
 
 @dataclass
