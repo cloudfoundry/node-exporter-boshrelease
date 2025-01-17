@@ -37,8 +37,24 @@ sed -i -e "s/node_exporter-$USED_NODE_EXPORTER_VERSION\.linux-amd64/node_exporte
 echo $DRY_RUN
 
 if [ -z "$DRY_RUN" ]; then
-  echo "I would have uploaded blobs"
-  echo "I would have created a PR"
+  echo "TODO: Add upload blobs"
+  export GH_TOKEN=${GITHUB_COM_TOKEN}
+  cd git
+  branch_name="node_exporter-auto-bump-master"
+  existing_prs="$(gh pr list --head $branch_name --json)"
+  if [ ${#key[@]} == 0 ]; then
+    git checkout -b $branch_name
+    git config user.name "$BOT_USER_NAME"
+    git config user.email "$BOT_USER_MAIL"
+    git add config/blobs.yml
+    git commit --author="${BOT_USER_NAME} <${BOT_USER_MAIL}>" -m "Bump node_exporter version to 1.8.2"
+    git add packages/node_exporter
+    git commit --author="${BOT_USER_NAME} <${BOT_USER_MAIL}>" -m "Update blob reference for node_exporter to version 1.8.2"
+    git push origin -u $branch_name
+    gh pr create --base $PR_BASE --head $branch_name --title "Bump node_exporter version to 1.8.2" --body "Automatic bump from version 1.8.1 to version 1.8.1, downloaded from https://github.com/prometheus/node_exporter/releases/tag/v1.8.2.\nAfter merge, consider releasing a new version of node-exporter-boshrelease." --label $PR_LABEL
+  else
+    echo "A PR already exists"
+  fi
 else
   echo "DRY_RUN: bosh upload-blobs --sha2"
   echo "TODO Create PR"

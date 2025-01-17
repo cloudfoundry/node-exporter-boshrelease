@@ -397,6 +397,7 @@ resources:
       uri:         git@github.com:cloudfoundry/node-exporter-boshrelease.git
       branch:      master
       private_key: ((github.private_key))
+      private_key_user: ((github.bot_user))
 
   - name: git-pull-requests
     type: pull-request
