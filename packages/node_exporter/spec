@@ -3,4 +3,4 @@ name: node_exporter
 
 files:
   - common/utils.sh
-  - node_exporter/node_exporter-1.8.1.linux-amd64.tar.gz
+  - node_exporter/node_exporter-v1.8.2.linux-amd64.tar.gz
