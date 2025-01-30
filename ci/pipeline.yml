@@ -1,0 +1,113 @@
+---
+
+groups:
+  - name: node-exporter-boshrelease
+    jobs:
+      - unit-tests
+      - unit-tests-pr
+
+jobs:
+  - name: unit-tests
+    public: true
+    serial: true
+    plan:
+    - do:
+      - get: git
+        trigger: true
+      - task: unit-tests
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: bguttmannavtq/pipeline-image
+              tag:        latest
+          inputs:
+            - { name: git }
+          caches:
+          - path: git/vendor/cache
+          - path: git/.bundle
+          run:
+            path: ./git/ci/scripts/unit-tests
+            args: []
+          params:
+            REPO_ROOT: git
+      on_failure:
+        put: notify
+        params:
+          channel:  "#prometheus"
+          username: ci-bot
+  - name: unit-tests-pr
+    public: true
+    serial: true
+    plan:
+    - do:
+      - { get: git-pull-requests, trigger: true, version: every }
+      - put: git-pull-requests
+        params:
+          path: git-pull-requests
+          status: pending
+          context: unit-tests
+      - task: unit-tests
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: bguttmannavtq/pipeline-image
+              tag:        latest
+          inputs:
+            - { name: git-pull-requests }
+          caches:
+          - path: git-pull-requests/vendor/cache
+          - path: git-pull-requests/.bundle
+          run:
+            path: ./git-pull-requests/ci/scripts/unit-tests
+            args: []
+          params:
+            REPO_ROOT: git-pull-requests
+    on_success:
+      put: git-pull-requests
+      params:
+        path: git-pull-requests
+        status: success
+        context: unit-tests
+    on_failure:
+      put: git-pull-requests
+      params:
+        path: git-pull-requests
+        status: failure
+        context: unit-tests
+
+resource_types:
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+
+  - name: pull-request
+    type: docker-image
+    source:
+      repository: cfcommunity/github-pr-resource
+
+resources:
+  - name: notify
+    type: slack-notification
+    source:
+      url: ((slack.url))
+
+  - name: git
+    type: git
+    source:
+      uri:         git@github.com:cloudfoundry/node-exporter-boshrelease.git
+      branch:      master
+      private_key: ((github.private_key))
+      private_key_user: ((github.bot_user))
+
+  - name: git-pull-requests
+    type: pull-request
+    source:
+      access_token: ((github.token))
+      repository:   cloudfoundry/node-exporter-boshrelease
+      base_branch:  master
+      labels:       [run-ci]
