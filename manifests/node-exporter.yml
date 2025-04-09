@@ -28,6 +28,6 @@ stemcells:
 
 releases:
 - name: node-exporter
-  version: 5.6.0
-  url: https://github.com/cloudfoundry/node-exporter-boshrelease/releases/download/v5.6.0/node-exporter-5.6.0.tgz
-  sha1: 97de485e35a6ab27ea19008d8fb40c9165e58cd3
+  version: 5.7.0
+  url: https://github.com/cloudfoundry/node-exporter-boshrelease/releases/download/v5.7.0/node-exporter-5.7.0.tgz
+  sha1: 8416c4914f251743c94a00eeae56e8f727801f47
