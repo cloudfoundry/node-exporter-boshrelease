@@ -163,6 +163,12 @@ case $1 in
       <% if_p('node_exporter.collector.qdisc.fixtures') do |fixtures| %> \
       --collector.qdisc.fixtures="<%= fixtures %>" \
       <% end %> \
+      <% if_p('node_exporter.collector.qdisc.device_include') do |device_include| %> \
+      --collector.qdisk.device-include="<%= device_include %>" \
+      <% end %> \
+      <% if_p('node_exporter.collector.qdisc.device_exclude') do |device_exclude| %> \
+      --collector.qdisk.device-exclude="<%= device_exclude %>" \
+      <% end %> \
       <% if_p('node_exporter.collector.runit.service_dir') do |service_dir| %> \
       --collector.runit.servicedir="<%= service_dir %>" \
       <% end %> \
