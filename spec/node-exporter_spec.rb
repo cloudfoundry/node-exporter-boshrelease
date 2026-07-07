@@ -105,4 +105,44 @@ describe 'node_exporter job' do
     end
   end
 
+  describe 'bin/node_exporter_ctl template' do
+    let(:template) { job.template('bin/node_exporter_ctl') }
+    let(:rendered_template) { template.render(properties) }
+    let(:properties) do
+      {
+        'node_exporter' => {
+          'collector' => {
+            'qdisc' => {
+              'device_include' => '(eth0|wlan0)'
+            }
+          }
+        }
+      }
+    end
+
+    it 'renders qdisc device include flag' do
+      expect(rendered_template).to include('--collector.qdisk.device-include="(eth0|wlan0)"')
+    end
+  end
+
+  describe 'bin/node_exporter_ctl template' do
+    let(:template) { job.template('bin/node_exporter_ctl') }
+    let(:rendered_template) { template.render(properties) }
+    let(:properties) do
+      {
+        'node_exporter' => {
+          'collector' => {
+            'qdisc' => {
+              'device_exclude' => 'veth.*'
+            }
+          }
+        }
+      }
+    end
+
+    it 'renders qdisc device exclude flag' do
+      expect(rendered_template).to include('--collector.qdisk.device-exclude="veth.*"')
+    end
+  end
+
 end

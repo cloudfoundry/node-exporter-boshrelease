@@ -75,6 +75,12 @@ properties:
   node_exporter.collector.qdisc.fixtures:
     description: "test fixtures to use for qdisc collector end-to-end testing"
 
+  node_exporter.collector.qdisc.device_include:
+    description: "Regexp of qdisc devices to include (mutually exclusive to device_exclude)"
+
+  node_exporter.collector.qdisc.device_exclude:
+    description: "Regexp of qdisc devices to exclude (mutually exclusive to device_include)"
+
   node_exporter.collector.runit.service_dir:
     description: "Path to runit service directory"
 
