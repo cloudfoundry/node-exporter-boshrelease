@@ -30,4 +30,4 @@ releases:
 - name: node-exporter
   version: 5.8.0
   url: https://github.com/cloudfoundry/node-exporter-boshrelease/releases/download/v5.8.0/node-exporter-5.8.0.tgz
-  sha1: 91d48703b6d0ead2530dd2616f76860992d0eeb8
+  sha1: fe95651a07029512516061113d4ff92c114ae58a

@@ -25,6 +25,8 @@ builds:
     version: 5.6.0
   b615cb54-51d2-4e0c-4031-d17b14c2e449:
     version: 4.2.0
+  cd55d5b7-4412-41ae-5848-2924f12573ca:
+    version: 5.8.0
   dfe669b3-a9da-49fe-4a83-6120fe4acec2:
     version: 5.1.0
   e657827a-2129-4463-7e9f-cf79c36a23a8:
