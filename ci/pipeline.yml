@@ -7,6 +7,7 @@ groups:
       - unit-tests-pr
       - acceptance-tests
       - acceptance-tests-pr
+      - autobump-dependencies
 
 jobs:
   - name: unit-tests
@@ -157,6 +158,41 @@ jobs:
         status: failure
         context: acceptance-tests
 
+  - name: autobump-dependencies
+    public: true
+    serial: true
+    plan:
+      - do:
+          - get: daily
+            trigger: true
+          - get: git
+          - task: autobump-dependencies
+            config:
+              image_resource:
+                type: docker-image
+                source:
+                  repository: bguttmannavtq/pipeline-image
+                  tag:        latest
+              inputs:
+                - name: git
+              platform: linux
+              run:
+                dir: git
+                path: bash
+                args: ["ci/scripts/autobump-dependencies.sh"]
+              params:
+                REPO_ROOT: git
+                PR_BASE: master
+                PR_ORG: cloudfoundry
+                PR_LABEL: run-ci
+# TODO: Remove DRY_RUN
+                DRY_RUN: true
+                AWS_SECRET_ACCESS_KEY: ((s3.secret_access_key))
+                AWS_ACCESS_KEY: ((s3.access_key_id))
+                GITHUB_COM_TOKEN: ((github.token))
+                BOT_USER_NAME: ((github.bot_user))
+                BOT_USER_MAIL: ((github.bot_mail))
+
 resource_types:
   - name: slack-notification
     type: docker-image
@@ -199,3 +235,11 @@ resources:
     type: bosh-io-stemcell
     source:
       name: bosh-warden-boshlite-ubuntu-noble
+
+  - name: daily
+    type: time
+    source:
+      start: 7:00 AM
+      stop: 8:00 AM
+      location: Europe/Berlin
+      interval: 24h
